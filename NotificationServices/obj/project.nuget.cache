@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "xRAn+Yj8Zu6hykDMhITfEmqwg6NZmf67EOR9gJwDlyyvGuiO7O0rUwpY36L6Ssnts/VNaOsR38ggNyupOCnYtw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Pabitra Bhunia\\source\\repos\\NotificationSystem\\NotificationServices\\NotificationServices.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Pabitra Bhunia\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\7.0.0\\microsoft.extensions.configuration.abstractions.7.0.0.nupkg.sha512",
+    "C:\\Users\\Pabitra Bhunia\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\7.0.0\\microsoft.extensions.dependencyinjection.abstractions.7.0.0.nupkg.sha512",
+    "C:\\Users\\Pabitra Bhunia\\.nuget\\packages\\microsoft.extensions.primitives\\7.0.0\\microsoft.extensions.primitives.7.0.0.nupkg.sha512",
+    "C:\\Users\\Pabitra Bhunia\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
