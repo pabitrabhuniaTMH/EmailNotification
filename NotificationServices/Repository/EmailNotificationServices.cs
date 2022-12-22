@@ -15,10 +15,14 @@ namespace NotificationServices.Repository
     public class EmailNotificationServices : IEmailNotificationServices
     {
         public readonly IConfiguration _configuration;
-        public readonly string _sendEmail;
-        public readonly string _sendPassword;
+        public readonly string? _sendEmail;
+        public readonly string? _sendPassword;
+        private readonly NotificationLog _notificationLog;
+        private readonly long _timeStamp;
         public EmailNotificationServices(IConfiguration configuration)
         {
+            _timeStamp = TimeStamp.GetTimeStamp();
+            _notificationLog = new NotificationLog(_timeStamp);
             _sendEmail = configuration.GetSection("MailInfo").GetSection("Email").Value;
             _sendPassword = configuration.GetSection("MailInfo").GetSection("Password").Value;
         }
@@ -26,8 +30,10 @@ namespace NotificationServices.Repository
         {
             try
             {
+                _notificationLog.WriteLogMessage("Check Email if valid");
                 if (!Regex.IsMatch(emailNotification.NotifyTo.EMAIL, @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z", RegexOptions.IgnoreCase))
                     throw new Exception(emailNotification.NotifyTo.EMAIL+" Is not a valid email");
+                _notificationLog.WriteLogMessage(emailNotification.NotifyTo.EMAIL+" this is a valid Email");
                 MailMessage mail = new MailMessage();
                 mail.To.Add(emailNotification.NotifyTo.EMAIL);
                 mail.From = new MailAddress(_sendEmail);            
@@ -40,7 +46,9 @@ namespace NotificationServices.Repository
                 smtp.UseDefaultCredentials = false;
                 smtp.Credentials = new System.Net.NetworkCredential(_sendEmail, _sendPassword);   
                 smtp.EnableSsl = true;
+                _notificationLog.WriteLogMessage("Email Sending...");
                 smtp.Send(mail);
+                _notificationLog.WriteLogMessage("Email successfully sent...");
                 return new ApiResponseModel
                 {
                     MsgHdr = new ResponseModel<BaseResponseModel> {
@@ -55,6 +63,7 @@ namespace NotificationServices.Repository
             }
             catch (Exception ex)
             {
+                _notificationLog.WriteLogMessage(ex.ToString());
                 return new ApiResponseModel
                 {
                     MsgHdr = new ResponseModel<BaseResponseModel>

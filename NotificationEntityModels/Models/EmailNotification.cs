@@ -9,15 +9,17 @@ namespace NotificationEntityModels.Models
 {
     public class EmailNotification
     {
-        public NotifyTo NotifyTo { get; set; }
-        public EmailTemplate EmailTemplate { get; set; }    
+        [Required(ErrorMessage = "NotifyTo is required")]
+        public NotifyTo? NotifyTo { get; set; }
+        [Required(ErrorMessage = "EmailTemplate is required")]
+        public EmailTemplate? EmailTemplate { get; set; }    
     }
     public class NotifyTo:BaseEntity
     {
         [Required(ErrorMessage = "NAME is required")]
-        public string NAME { get; set; }
+        public string? NAME { get; set; }
         [Required(ErrorMessage ="Email should not be null")]
-        public string EMAIL { get; set; }
+        public string? EMAIL { get; set; }
     }
     public class EmailTemplate
     {
@@ -25,12 +27,6 @@ namespace NotificationEntityModels.Models
         public string EMAILSUBJECT { get; set; }
         [Required(ErrorMessage = "EMAILBODY is required")]
         public string EMAILBODY { get; set; }
-    }
-    public class EmailResponse
-    {
-        public string STATUS { get; set; }
-        public string STATUSCODE { get; set; }
-        public string MESSAGE { get; set; }
     }
 
 }
