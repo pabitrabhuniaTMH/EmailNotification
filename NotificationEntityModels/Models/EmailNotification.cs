@@ -7,12 +7,16 @@ using System.Threading.Tasks;
 
 namespace NotificationEntityModels.Models
 {
+
     public class EmailNotification
     {
         [Required(ErrorMessage = "NotifyTo is required")]
         public NotifyTo? NotifyTo { get; set; }
-        [Required(ErrorMessage = "EmailTemplate is required")]
-        public EmailTemplate? EmailTemplate { get; set; }    
+        [Required(ErrorMessage = "NotificationType is required")]
+        public Char? NotificationType { get; set; }
+        [Required(ErrorMessage = "NotificationTemplateId is required")]
+        public string? NotificationTemplateId { get; set; }
+
     }
     public class NotifyTo:BaseEntity
     {
@@ -21,12 +25,11 @@ namespace NotificationEntityModels.Models
         [Required(ErrorMessage ="Email should not be null")]
         public string? EMAIL { get; set; }
     }
-    public class EmailTemplate
+    public enum NFType
     {
-        [Required(ErrorMessage = "EMAILSUBJECT is required")]
-        public string EMAILSUBJECT { get; set; }
-        [Required(ErrorMessage = "EMAILBODY is required")]
-        public string EMAILBODY { get; set; }
+        SMS='S',
+        EMAIL='E',
+        WHATSAPP='W'
     }
 
 }

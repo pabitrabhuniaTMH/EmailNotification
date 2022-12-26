@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using NotificationEntityModels.Models;
 using NotificationServices.IRepository;
 using OTPServices.ServiceHelper;
+using System.Text.Json;
 
 namespace NotificationSystem.Controllers
 {
@@ -21,11 +22,12 @@ namespace NotificationSystem.Controllers
         }
         [HttpPost]
         [Route("SendNotificationToEmail")]
-        public IActionResult SendNotificationToEmail(EmailNotification emailNotification)
+        public async Task<IActionResult> SendNotificationToEmail(EmailNotification emailNotification)
         {
             _notificationLog.WriteLogMessage("SendNotification started------Controller: SendNotification");
-            var result = _emailNotificationServices.SendNotification(emailNotification);
+            var result = await _emailNotificationServices.SendNotification(emailNotification);
             return Ok(result);
+            
         }
     }
 }

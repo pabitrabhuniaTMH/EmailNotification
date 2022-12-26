@@ -10,9 +10,9 @@ namespace SMSNotificationServices.Repository
 {
     public class SMSNotificationService : ISMSNotificationService
     {
-        private readonly string? _accountSID;
-        private readonly string? _authToken;
-        private readonly string? _fromPhone;
+        private readonly string _accountSID;
+        private readonly string _authToken;
+        private readonly string _fromPhone;
         public SMSNotificationService(IConfiguration configuration)
         {
             _accountSID = configuration.GetSection("SMSService").GetSection("AccountSID").Value;

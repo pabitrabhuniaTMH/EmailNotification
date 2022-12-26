@@ -13,7 +13,7 @@ namespace NotificationServices
     {
         public static IServiceCollection ConfigNotificationService(this IServiceCollection services)
         {
-            services.AddScoped<IEmailNotificationServices,EmailNotificationServices>();
+            services.AddScoped<IEmailNotificationServices,EmailNotificationService>();
             return services;
         }
     }

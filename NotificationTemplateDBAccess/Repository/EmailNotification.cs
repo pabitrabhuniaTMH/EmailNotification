@@ -39,7 +39,7 @@ namespace NotificationTemplateDBAccess.Repository
                 using (var db = new OracleConnection(_connectionString))
                 {
                    var result= db.Execute("PROC_NOTIFICATION", dp,commandType:CommandType.StoredProcedure);
-                    //var result= SqlMapper.QuerySingle(db, "PROC_NOTIFICATION", dp,commandType:CommandType.StoredProcedure);
+                   //var result= SqlMapper.QuerySingle(db, "PROC_NOTIFICATION", dp,commandType:CommandType.StoredProcedure);
                     return result;
                 }
             }

@@ -10,14 +10,22 @@ namespace NotificationTemplate.Controllers
     public class NotificationTemplateController : ControllerBase
     {
         private readonly IEmailNotificationService _emailNotificationService;
-        public NotificationTemplateController(IEmailNotificationService emailNotificationService)
+        private readonly ITemplateServices _templateServices;
+        public NotificationTemplateController(IEmailNotificationService emailNotificationService,ITemplateServices templateServices)
         {
             _emailNotificationService=emailNotificationService;
+            _templateServices=templateServices;
         }
         [HttpPost("SaveEmailNotificationTemplate")]
-        public IActionResult SaveEmailNotificationTemplate(EmailNotificationTemplate emailNotification)
+        public IActionResult SaveEmailNotificationTemplate([FromBody]EmailNotificationTemplate emailNotification)
         {
             var result=_emailNotificationService.SaveNotificationTemplate(emailNotification);
+            return Ok(result);
+        }
+        [HttpGet("GetNotificationTemplate")]
+        public IActionResult GetNotificationTemplate(string Type,int NotificationId)
+        {
+            var result = _templateServices.GetTemplateByType(Type, NotificationId);
             return Ok(result);
         }
     }

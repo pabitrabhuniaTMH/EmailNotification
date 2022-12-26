@@ -4,6 +4,6 @@ namespace NotificationServices.IRepository
 {
     public interface IEmailNotificationServices
     {
-        public ApiResponseModel SendNotification(EmailNotification emailNotification);
+        public Task<ApiResponseModel> SendNotification(EmailNotification emailNotification);
     }
 }
