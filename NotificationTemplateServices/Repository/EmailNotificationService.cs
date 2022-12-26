@@ -2,26 +2,26 @@
 using NotificationEntityModels.Models;
 using NotificationTemplateServices.IRepository;
 using OTPServices.ServiceHelper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NotificationTemplateServices.Repository
 {
     public class EmailNotificationService : IEmailNotificationService
     {
         private readonly IEmailNotification _emailNotification;
+        private readonly NotificationLog _notificationLog;
+        private readonly long _timeStamp;
         public EmailNotificationService(IEmailNotification emailNotification)
         {
-            _emailNotification=emailNotification;
+            _timeStamp = TimeStamp.GetTimeStamp();
+            _notificationLog = new NotificationLog(_timeStamp);
+            _emailNotification =emailNotification;
         }
         #region Save Notification Template
         public ApiResponseModel SaveNotificationTemplate(EmailNotificationTemplate emailNotificationTemplate)
         {
             try
             {
+                _notificationLog.WriteLogMessage("-----Services-----  Called SeveNotification");
                 var result = _emailNotification.SeveNotification(emailNotificationTemplate);
                 if (result != 0)
                 {
@@ -55,6 +55,7 @@ namespace NotificationTemplateServices.Repository
             }
             catch (Exception e)
             {
+                _notificationLog.WriteLogMessage("-------------------Error-----------------\n  "+e.ToString());
                 return new ApiResponseModel
                 {
                     MsgHdr = new ResponseModel<BaseResponseModel>

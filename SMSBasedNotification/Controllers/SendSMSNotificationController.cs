@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NotificationEntityModels.Models;
+using OTPServices.ServiceHelper;
 using SMSNotificationServices.IRepository;
 
 namespace SMSBasedNotification.Controllers
@@ -10,13 +11,18 @@ namespace SMSBasedNotification.Controllers
     public class SendNotificationToSMSController : ControllerBase
     {
         private readonly ISMSNotificationService _sMSNotificationService;
+        private readonly NotificationLog _notificationLog;
+        private readonly long _timeStamp;
         public SendNotificationToSMSController(ISMSNotificationService sMSNotificationService)
         {
-            _sMSNotificationService= sMSNotificationService;
+            _timeStamp = TimeStamp.GetTimeStamp();
+            _notificationLog = new NotificationLog(_timeStamp);
+            _sMSNotificationService = sMSNotificationService;
         }
         [HttpPost("SendNotificationToSMS")]
-        public IActionResult SendNotificationToSMS(SMSNotification sMSNotification)
+        public IActionResult SendNotificationToSMS([FromBody]SMSNotification sMSNotification)
         {
+            _notificationLog.WriteLogMessage("Sending SMS notification");
             var result = _sMSNotificationService.SendNotification(sMSNotification);
             return Ok(result);
         }

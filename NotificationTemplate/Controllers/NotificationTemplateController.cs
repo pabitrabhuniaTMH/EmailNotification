@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using NotificationEntityModels.Models;
 using NotificationTemplateServices.IRepository;
+using OTPServices.ServiceHelper;
 
 namespace NotificationTemplate.Controllers
 {
@@ -11,14 +12,19 @@ namespace NotificationTemplate.Controllers
     {
         private readonly IEmailNotificationService _emailNotificationService;
         private readonly ITemplateServices _templateServices;
+        private readonly NotificationLog _notificationLog;
+        private readonly long _timeStamp;
         public NotificationTemplateController(IEmailNotificationService emailNotificationService,ITemplateServices templateServices)
         {
-            _emailNotificationService=emailNotificationService;
+            _timeStamp = TimeStamp.GetTimeStamp();
+            _notificationLog = new NotificationLog(_timeStamp);
+            _emailNotificationService =emailNotificationService;
             _templateServices=templateServices;
         }
         [HttpPost("SaveEmailNotificationTemplate")]
         public IActionResult SaveEmailNotificationTemplate([FromBody]EmailNotificationTemplate emailNotification)
         {
+            _notificationLog.WriteLogMessage("-----Save Email notification---- Controller Name: SaveEmailNotificationTemplate");
             var result=_emailNotificationService.SaveNotificationTemplate(emailNotification);
             return Ok(result);
         }

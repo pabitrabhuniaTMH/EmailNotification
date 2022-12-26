@@ -13,8 +13,12 @@ namespace SMSNotificationServices.Repository
         private readonly string _accountSID;
         private readonly string _authToken;
         private readonly string _fromPhone;
+        private readonly NotificationLog _notificationLog;
+        private readonly long _timeStamp;
         public SMSNotificationService(IConfiguration configuration)
         {
+            _timeStamp = TimeStamp.GetTimeStamp();
+            _notificationLog = new NotificationLog(_timeStamp);
             _accountSID = configuration.GetSection("SMSService").GetSection("AccountSID").Value;
             _authToken = configuration.GetSection("SMSService").GetSection("AuthToken").Value;
             _fromPhone= configuration.GetSection("SMSService").GetSection("FromPhone").Value;
@@ -24,11 +28,13 @@ namespace SMSNotificationServices.Repository
         {
             try
             {
+                _notificationLog.WriteLogMessage("Checking Phone Number  "+sMSNotification.PHONE);
                 if (sMSNotification.PHONE == null && sMSNotification.PHONE == "")
                     throw new Exception("Phone Number should not be null");
                 TwilioClient.Init(_accountSID, _authToken);
                 var message = MessageResource.Create(from: new Twilio.Types.PhoneNumber(_fromPhone), 
                     body: sMSNotification.MSGBODY, to: new Twilio.Types.PhoneNumber("+91" + sMSNotification.PHONE));
+                _notificationLog.WriteLogMessage("MSG Successfully sent  Ref Id: "+message);
                 return new ApiResponseModel
                 {
                     MsgHdr = new BaseResponseModel
@@ -43,6 +49,7 @@ namespace SMSNotificationServices.Repository
             }
             catch (Exception e)
             {
+                _notificationLog.WriteLogMessage("------------------Error------------------\n  "+e.ToString());
                 return new ApiResponseModel
                 {
                     MsgHdr = new BaseResponseModel

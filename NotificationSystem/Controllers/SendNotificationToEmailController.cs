@@ -22,7 +22,7 @@ namespace NotificationSystem.Controllers
         }
         [HttpPost]
         [Route("SendNotificationToEmail")]
-        public async Task<IActionResult> SendNotificationToEmail(EmailNotification emailNotification)
+        public async Task<IActionResult> SendNotificationToEmail([FromBody]EmailNotification emailNotification)
         {
             _notificationLog.WriteLogMessage("SendNotification started------Controller: SendNotification");
             var result = await _emailNotificationServices.SendNotification(emailNotification);
