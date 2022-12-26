@@ -17,6 +17,7 @@ namespace NotificationTemplateServices.Repository
         {
             _template=template;
         }
+        #region Get Template
         public ApiResponseModel GetTemplateByType(string type,int NotificationId)
         {
             try
@@ -35,7 +36,7 @@ namespace NotificationTemplateServices.Repository
                         MsgBdy = new ResponseModel<NotificationParams>
                         {
                             Data = result.FirstOrDefault()
-                }
+                        }
                     };
                 }
                 return new ApiResponseModel
@@ -63,5 +64,6 @@ namespace NotificationTemplateServices.Repository
                 };
             }
         }
+        #endregion
     }
 }

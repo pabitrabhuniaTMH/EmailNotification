@@ -17,6 +17,7 @@ namespace NotificationTemplateServices.Repository
         {
             _emailNotification=emailNotification;
         }
+        #region Save Notification Template
         public ApiResponseModel SaveNotificationTemplate(EmailNotificationTemplate emailNotificationTemplate)
         {
             try
@@ -71,5 +72,6 @@ namespace NotificationTemplateServices.Repository
             
 
         }
+        #endregion
     }
 }

@@ -35,6 +35,7 @@ namespace NotificationServices.Repository
             _sendEmail = configuration.GetSection("MailInfo").GetSection("Email").Value;
             _sendPassword = configuration.GetSection("MailInfo").GetSection("Password").Value;
         }
+        #region send notification to email
         public async Task<ApiResponseModel> SendNotification(EmailNotification emailNotification)
         {
             try
@@ -44,21 +45,28 @@ namespace NotificationServices.Repository
                     throw new Exception("Notification Type is not a valid type");
                 ApiResponseModel? apiResponseModel = new ApiResponseModel();
                 _notificationLog.WriteLogMessage("Check Email if valid");
-                if (!Regex.IsMatch(emailNotification.NotifyTo.EMAIL, @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z", RegexOptions.IgnoreCase))
+
+                //check valid email
+                if (!Regex.IsMatch(emailNotification.NotifyTo.EMAIL, @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}
+                ~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:
+                [a-z0-9-]*[a-z0-9])?)\Z", RegexOptions.IgnoreCase))
                     throw new Exception(emailNotification.NotifyTo.EMAIL + " Is not a valid email");
-                _notificationLog.WriteLogMessage(emailNotification.NotifyTo.EMAIL + " this is a valid Email");
+
+                //Called Get Template API
                 string endpoint = apiBaseUrl + MethodsName.GetTemplate + "?Type="+ nFType+"&&NotificationId="+Convert.ToInt32(emailNotification.NotificationTemplateId);
+                _notificationLog.WriteLogMessage("Get Template API calling  Endpoint: "+endpoint);
                 _httpClient.DefaultRequestHeaders.Accept.Clear();
                 using (var Response = await _httpClient.GetAsync(endpoint))
                 {
                     var result = await Response.Content.ReadAsStringAsync();
                     apiResponseModel = JsonConvert.DeserializeObject<ApiResponseModel>(result);
                 }
-               // NotificationParams prm = new NotificationParams();
                 var data = JsonConvert.DeserializeObject<ResponseModel<NotificationParams>>(apiResponseModel.MsgBdy.ToString());
+                //Template exsits
                 if (data.Data == null)
                     throw new Exception("Template is not available");
                 var username = emailNotification.NotifyTo.NAME;
+                #region Email sending
                 MailMessage mail = new MailMessage();
                 mail.To.Add(emailNotification.NotifyTo.EMAIL);
                 mail.From = new MailAddress(_sendEmail);
@@ -76,8 +84,8 @@ namespace NotificationServices.Repository
                     smtp.Send(mail);
                     _notificationLog.WriteLogMessage("Email successfully sent...");
                 }
-                    
-                
+                #endregion
+
                 return new ApiResponseModel
                 {
                     MsgHdr = new ResponseModel<BaseResponseModel> {
@@ -109,6 +117,7 @@ namespace NotificationServices.Repository
             }
             
         }
+        #endregion
 
     }
 }

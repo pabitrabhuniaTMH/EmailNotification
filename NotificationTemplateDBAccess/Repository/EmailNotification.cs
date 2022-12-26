@@ -21,11 +21,12 @@ namespace NotificationTemplateDBAccess.Repository
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
-
+        #region Save Notification Template
         public int SeveNotification(EmailNotificationTemplate e)
         {
             try
             {
+                //Oracle stored procedure parameter
                 var dp = new OracleDynamicParameters();
                 dp.Add("ID", OracleDbType.Decimal, ParameterDirection.Input,0545454);
                 dp.Add("NotificationType", OracleDbType.NVarchar2,ParameterDirection.Input, e.NotificationType);
@@ -38,8 +39,8 @@ namespace NotificationTemplateDBAccess.Repository
                 dp.Add("Task", OracleDbType.NVarchar2, ParameterDirection.Input, "SaveEmailTemplate");
                 using (var db = new OracleConnection(_connectionString))
                 {
+                   //Execute Oracle stored procedure using dapper
                    var result= db.Execute("PROC_NOTIFICATION", dp,commandType:CommandType.StoredProcedure);
-                   //var result= SqlMapper.QuerySingle(db, "PROC_NOTIFICATION", dp,commandType:CommandType.StoredProcedure);
                     return result;
                 }
             }
@@ -49,5 +50,6 @@ namespace NotificationTemplateDBAccess.Repository
             }
 
         }
+        #endregion
     }
 }

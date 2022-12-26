@@ -16,6 +16,7 @@ namespace NotificationEntityModels.Models
         public string MSGBODY { get; set; }
     }
 
+    //Custom Phone Number validation
     public class IsPhone : ValidationAttribute
     {
         protected override ValidationResult IsValid(object? value, ValidationContext validationContext)

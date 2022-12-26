@@ -20,8 +20,10 @@ namespace NotificationTemplateDBAccess.Repository
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
+        #region Get Notification Template
         public IEnumerable<NotificationParams> GetTemplateByType(string type,int NotificationId)
         {
+            //Fatching Notification Template using dapper
             using (var db = new OracleConnection(_connectionString))
             {
                 var result = db.Query<NotificationParams>("SELECT * FROM TBL_NOTIFICATIONTEMPLATE WHERE NOTIFICATIONTYPE='"+type+"' AND ID="+NotificationId+"");
@@ -30,6 +32,7 @@ namespace NotificationTemplateDBAccess.Repository
             }
             
         }
+        #endregion
 
     }
 }

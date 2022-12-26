@@ -25,6 +25,8 @@ namespace NotificationEntityModels.Models
         [Required(ErrorMessage ="Email should not be null")]
         public string? EMAIL { get; set; }
     }
+
+    //For notification type
     public enum NFType
     {
         SMS='S',
