@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using NotificationEntityModels.Models;
 using NotificationServices.IRepository;
-using OTPServices.ServiceHelper;
+using EmailNotificationServices.ServiceHelper;
 using System.Text.Json;
 
 namespace NotificationSystem.Controllers

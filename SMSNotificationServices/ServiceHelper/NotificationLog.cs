@@ -1,4 +1,4 @@
-﻿namespace OTPServices.ServiceHelper
+﻿namespace SMSNotificationServices.ServiceHelper
 {
     public class NotificationLog
     {

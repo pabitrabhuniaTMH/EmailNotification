@@ -2,7 +2,7 @@
 using System.Net;
 using System.Text.RegularExpressions;
 
-namespace OTPServices.ServiceHelper
+namespace SMSNotificationServices.ServiceHelper
 {
     static class Helper
     {

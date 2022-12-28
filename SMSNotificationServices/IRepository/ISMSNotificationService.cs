@@ -8,6 +8,6 @@ namespace SMSNotificationServices.IRepository
 {
     public interface ISMSNotificationService
     {
-        public ApiResponseModel SendNotification(SMSNotification sMSNotification);
+        public Task<ApiResponseModel> SendNotification(SMSNotification sMSNotification);
     }
 }

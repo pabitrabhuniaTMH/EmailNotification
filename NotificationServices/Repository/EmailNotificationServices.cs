@@ -1,18 +1,10 @@
-﻿using EmailNotificationServices.ServiceHelper;
+﻿    using EmailNotificationServices.ServiceHelper;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using NotificationEntityModels.Models;
 using NotificationServices.IRepository;
-using OTPServices.ServiceHelper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
 using System.Net.Mail;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Twilio.Http;
 
 namespace NotificationServices.Repository
 {
@@ -62,7 +54,7 @@ namespace NotificationServices.Repository
                     apiResponseModel = JsonConvert.DeserializeObject<ApiResponseModel>(result);
                 }
                 var data = JsonConvert.DeserializeObject<ResponseModel<NotificationParams>>(apiResponseModel.MsgBdy.ToString());
-                //Template exsits
+                //If Template exsits
                 if (data.Data == null)
                     throw new Exception("Template is not available");
                 var username = emailNotification.NotifyTo.NAME;

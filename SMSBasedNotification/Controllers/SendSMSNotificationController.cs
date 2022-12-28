@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NotificationEntityModels.Models;
-using OTPServices.ServiceHelper;
 using SMSNotificationServices.IRepository;
-
+using SMSNotificationServices.ServiceHelper;
 namespace SMSBasedNotification.Controllers
 {
     [Route("api/v0.0.1/[controller]")]
@@ -20,10 +19,10 @@ namespace SMSBasedNotification.Controllers
             _sMSNotificationService = sMSNotificationService;
         }
         [HttpPost("SendNotificationToSMS")]
-        public IActionResult SendNotificationToSMS([FromBody]SMSNotification sMSNotification)
+        public async Task<IActionResult> SendNotificationToSMS([FromBody]SMSNotification sMSNotification)
         {
             _notificationLog.WriteLogMessage("Sending SMS notification");
-            var result = _sMSNotificationService.SendNotification(sMSNotification);
+            var result = await _sMSNotificationService.SendNotification(sMSNotification);
             return Ok(result);
         }
     }

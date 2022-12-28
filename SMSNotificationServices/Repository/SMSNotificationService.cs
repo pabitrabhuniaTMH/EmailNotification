@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using NotificationEntityModels.Models;
-using OTPServices.ServiceHelper;
+using SMSNotificationServices.ServiceHelper;
 using SMSNotificationServices.IRepository;
 using Twilio;
 using Twilio.Rest.Api.V2010.Account;
@@ -10,9 +11,12 @@ namespace SMSNotificationServices.Repository
 {
     public class SMSNotificationService : ISMSNotificationService
     {
-        private readonly string _accountSID;
-        private readonly string _authToken;
-        private readonly string _fromPhone;
+        public readonly IConfiguration _configuration;
+        private static string? apiBaseUrl = String.Empty;
+        private static readonly HttpClient _httpClient = new();
+        private readonly string? _accountSID;
+        private readonly string? _authToken;
+        private readonly string? _fromPhone;
         private readonly NotificationLog _notificationLog;
         private readonly long _timeStamp;
         public SMSNotificationService(IConfiguration configuration)
@@ -22,19 +26,50 @@ namespace SMSNotificationServices.Repository
             _accountSID = configuration.GetSection("SMSService").GetSection("AccountSID").Value;
             _authToken = configuration.GetSection("SMSService").GetSection("AuthToken").Value;
             _fromPhone= configuration.GetSection("SMSService").GetSection("FromPhone").Value;
+            apiBaseUrl = configuration.GetSection("TEMPLATEBYTYPR_API_PATH").Value;
+            if (_httpClient.BaseAddress == null)
+                _httpClient.BaseAddress = new Uri(apiBaseUrl);
         }
         #region SendNotification
-        public ApiResponseModel SendNotification(SMSNotification sMSNotification)
+        public async Task<ApiResponseModel> SendNotification(SMSNotification sMSNotification)
         {
             try
             {
+                NFType? nFType = (NFType)sMSNotification.NOTIFICATIONTYPE;
+                if (nFType != NFType.SMS)
+                    throw new Exception("Notification Type is not a valid type");
+
                 _notificationLog.WriteLogMessage("Checking Phone Number  "+sMSNotification.PHONE);
+                ApiResponseModel? apiResponseModel = new ApiResponseModel();
                 if (sMSNotification.PHONE == null && sMSNotification.PHONE == "")
                     throw new Exception("Phone Number should not be null");
+
+                #region Calling Get Template API
+                //Calling Get Template API
+                string endpoint = apiBaseUrl + MethodsName.GetTemplate + "?Type=" + nFType + "&&NotificationId=" + Convert.ToInt32(sMSNotification.TEMPLATENO);
+                _notificationLog.WriteLogMessage("Get Template API calling  Endpoint: " + endpoint);
+                _httpClient.DefaultRequestHeaders.Accept.Clear();
+                using (var Response = await _httpClient.GetAsync(endpoint))
+                {
+                    var result = await Response.Content.ReadAsStringAsync();
+                    apiResponseModel = JsonConvert.DeserializeObject<ApiResponseModel>(result);
+                }
+                var data = JsonConvert.DeserializeObject<ResponseModel<NotificationParams>>(apiResponseModel.MsgBdy.ToString());
+                
+                //If Template exsits
+                if (data.Data == null)
+                    throw new Exception("Template is not available");
+
+                #endregion End API Call
+
+                //Sending SMS using Twilio
                 TwilioClient.Init(_accountSID, _authToken);
+                var username = sMSNotification.NAME;
                 var message = MessageResource.Create(from: new Twilio.Types.PhoneNumber(_fromPhone), 
-                    body: sMSNotification.MSGBODY, to: new Twilio.Types.PhoneNumber("+91" + sMSNotification.PHONE));
+                    body: String.Format(data.Data.BodyMessage, username), to: new Twilio.Types.PhoneNumber("+91" + sMSNotification.PHONE));
                 _notificationLog.WriteLogMessage("MSG Successfully sent  Ref Id: "+message);
+                //END
+
                 return new ApiResponseModel
                 {
                     MsgHdr = new BaseResponseModel

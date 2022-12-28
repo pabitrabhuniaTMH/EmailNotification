@@ -13,7 +13,8 @@ namespace NotificationEntityModels.Models
         public string NAME { get; set; }
         [IsPhone]
         public string PHONE { get; set; }
-        public string MSGBODY { get; set; }
+        public Char NOTIFICATIONTYPE { get; set; }
+        public int TEMPLATENO { get; set; }
     }
 
     //Custom Phone Number validation

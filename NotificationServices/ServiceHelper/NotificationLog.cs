@@ -1,4 +1,4 @@
-﻿namespace OTPServices.ServiceHelper
+﻿namespace EmailNotificationServices.ServiceHelper
 {
     public class NotificationLog
     {
