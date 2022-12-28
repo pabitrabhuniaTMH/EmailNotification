@@ -16,4 +16,8 @@
     <ProjectReference Include="..\NotificationServices\EmailNotificationServices.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Logs\" />
+  </ItemGroup>
+
 </Project>
