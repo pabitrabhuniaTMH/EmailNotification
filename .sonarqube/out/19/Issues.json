@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json.schemastore.org/sarif-1.0.0",
+  "version": "1.0.0",
+  "runs": [
+    {
+      "tool": {
+        "name": "Microsoft (R) Visual C# Compiler",
+        "version": "4.3.0.0",
+        "fileVersion": "4.3.0-3.22365.10 (dd078d4e)",
+        "semanticVersion": "4.3.0",
+        "language": "en-US"
+      },
+      "results": [
+        {
+          "ruleId": "NUnit2018",
+          "level": "note",
+          "message": "Consider using the constraint model, Assert.That(expr, Is.Not.Null), instead of the classic model, Assert.NotNull(expr)",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/Pabitra%20Bhunia/source/EmailNotification%20GIT/UnitTestSMSBaseNotification/UnitTest.cs",
+                "region": {
+                  "startLine": 101,
+                  "startColumn": 13,
+                  "endLine": 101,
+                  "endColumn": 44
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "HasToleranceValue": "False",
+              "IsGenericMethod": "False",
+              "ModelName": "NotNull"
+            }
+          }
+        },
+        {
+          "ruleId": "NUnit2045",
+          "level": "note",
+          "message": "Call independent Assert statements from inside an Assert.Multiple",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/Pabitra%20Bhunia/source/EmailNotification%20GIT/UnitTestSMSBaseNotification/UnitTest.cs",
+                "region": {
+                  "startLine": 89,
+                  "startColumn": 13,
+                  "endLine": 89,
+                  "endColumn": 55
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        }
+      ],
+      "rules": {
+        "NUnit2018": {
+          "id": "NUnit2018",
+          "shortDescription": "Consider using Assert.That(expr, Is.Not.Null) instead of Assert.NotNull(expr)",
+          "fullDescription": "Consider using the constraint model, Assert.That(expr, Is.Not.Null), instead of the classic model, Assert.NotNull(expr).",
+          "defaultLevel": "note",
+          "helpUri": "https://github.com/nunit/nunit.analyzers/tree/master/documentation/NUnit2018.md",
+          "properties": {
+            "category": "Assertion",
+            "isEnabledByDefault": true
+          }
+        },
+        "NUnit2045": {
+          "id": "NUnit2045",
+          "shortDescription": "Use Assert.Multiple",
+          "fullDescription": "Hosting Asserts inside an Assert.Multiple allows detecting more than one failure.",
+          "defaultLevel": "note",
+          "helpUri": "https://github.com/nunit/nunit.analyzers/tree/master/documentation/NUnit2045.md",
+          "properties": {
+            "category": "Assertion",
+            "isEnabledByDefault": true
+          }
+        }
+      }
+    }
+  ]
+}

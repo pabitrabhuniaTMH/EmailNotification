@@ -1,12 +1,7 @@
 ﻿using NotificationEntityModels.IRepository;
 using NotificationEntityModels.Models;
 using NotificationTemplateServices.IRepository;
-using OTPServices.ServiceHelper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SMSNotificationServices.ServiceHelper;
 
 namespace NotificationTemplateServices.Repository
 {
@@ -18,11 +13,14 @@ namespace NotificationTemplateServices.Repository
             _template=template;
         }
         #region Get Template
+
         public ApiResponseModel GetTemplateByType(string type,int NotificationId)
         {
             try
             {
-                var result=_template.GetTemplateByType(type, NotificationId);
+                if (type == null || type == "")
+                    throw new InvalidDataException("Type Should Not Be Bull");
+                var result=_template.GetTemplateByType(type!, NotificationId);
                 if (result!=null)
                 {
                     return new ApiResponseModel
@@ -39,18 +37,9 @@ namespace NotificationTemplateServices.Repository
                         }
                     };
                 }
-                return new ApiResponseModel
-                {
-                    MsgHdr = new BaseResponseModel
-                    {
-                        ID = TimeStamp.GetTimeStamp(),
-                        Status = "Failed",
-                        StatusCode = 422,
-                        Message = "There is a internal error"
-                    }
-                };
+                throw new InvalidDataException();
             }
-            catch(Exception e)
+            catch(InvalidDataException e)
             {
                 return new ApiResponseModel
                 {

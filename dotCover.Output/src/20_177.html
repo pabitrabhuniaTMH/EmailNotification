@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Pabitra Bhunia\source\EmailNotification GIT\UnitTestNotificationTemplate\UnitTest.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc;
+using Moq;
+using Newtonsoft.Json;
+using NotificationEntityModels.IRepository;
+using NotificationEntityModels.Models;
+using NotificationTemplate.Controllers;
+using NotificationTemplateServices.IRepository;
+using NotificationTemplateServices.Repository;
+using NUnit.Framework;
+using SMSNotificationServices.ServiceHelper;
+
+namespace UnitTestNotificationTemplate
+{
+    public class Tests
+    {
+        private readonly Mock&lt;IEmailNotificationService&gt; _mockObjEmailNotification;
+        private readonly Mock&lt;ITemplateServices&gt; _mockObjTemplateServices;
+        private readonly Mock&lt;IEmailNotification&gt; _mockObjTemplate;
+        private readonly Mock&lt;ITemplate&gt; _mockObjGetTemplate;
+        public Tests()
+        {
+            //Creating Fake mock Object for constructor parameter
+            _mockObjEmailNotification= new Mock&lt;IEmailNotificationService&gt;();
+            _mockObjTemplateServices= new Mock&lt;ITemplateServices&gt;();
+            _mockObjTemplate = new Mock&lt;IEmailNotification&gt;();
+            _mockObjGetTemplate= new Mock&lt;ITemplate&gt;();
+        }
+
+        #region Test SaveNotification Template
+        [Test]
+        public void TestSaveNotificationTemplate()
+        {
+            //Expected value will be verify with actual value
+            var expectedValue = new ApiResponseModel
+            {
+                MsgHdr = new ResponseModel&lt;BaseResponseModel&gt;
+                {
+                    Data = new BaseResponseModel
+                    {
+                        ID = TimeStamp.GetTimeStamp(),
+                        StatusCode = 200,
+                        Status = &quot;Success&quot;,
+                        Message = &quot;Data Has Been Successfully saved&quot;
+                    }
+                }
+            };
+            _mockObjEmailNotification.Setup(x =&gt; x.SaveNotificationTemplate(It.IsAny&lt;EmailNotificationTemplate&gt;())).Returns(expectedValue);
+            var notificationTemplateController =new NotificationTemplateController(_mockObjEmailNotification.Object, _mockObjTemplateServices.Object);
+
+            //It will return actual value
+            var actualValue = notificationTemplateController.SaveEmailNotificationTemplate(
+                    new EmailNotificationTemplate
+                    {
+                        NotificationType = &quot;E&quot;,
+                        Type = &quot;Customize&quot;,
+                        Subject = &quot;Welcome&quot;,
+                        BodyMassage = &quot;Hi {0}, Welcome to INT&quot;,
+                        TemplateValidUpto = Convert.ToDateTime(&quot;2023-05-16T05:50:06.7199222&quot;),
+                        RequestDevice= &quot;40-8D-5C-36-32-32&quot;,
+                        Requestion=0
+                    });
+
+            //Converting actual vaue as  OkObjectResult
+            OkObjectResult? okObjectActualValue = actualValue as OkObjectResult;
+
+            //Compare both value Expected and Actual value
+            Assert.That(okObjectActualValue!.Value, Is.EqualTo(expectedValue));           
+        }
+        #endregion
+        [Test]
+        public void TestSaveNotificationTemplateServices()
+        {
+            var inputValue= new EmailNotificationTemplate
+            {
+                NotificationType = &quot;E&quot;,
+                Type = &quot;Customize&quot;,
+                Subject = &quot;Welcome&quot;,
+                BodyMassage = &quot;Hi {0}, Welcome to INT&quot;,
+                TemplateValidUpto = Convert.ToDateTime(&quot;2023-05-16T05:50:06.7199222&quot;),
+                RequestDevice = &quot;40-8D-5C-36-32-32&quot;,
+                Requestion = 0
+            };
+            _mockObjTemplate.Setup(x =&gt; x.SeveNotification(It.IsAny&lt;EmailNotificationTemplate&gt;())).Returns(-1);
+            var emailNotificationService = new EmailNotificationServices(_mockObjTemplate.Object);
+            var actualValue = emailNotificationService.SaveNotificationTemplate(inputValue);
+            var responseObject=new ResponseModel&lt;object&gt; { Data= actualValue.MsgHdr };
+            var responseData = responseObject.Data;
+            ResponseModel&lt;BaseResponseModel&gt;? responseModel = responseData as ResponseModel&lt;BaseResponseModel&gt;;
+            var response = responseModel!.Data; 
+            Assert.That(response!.StatusCode, Is.EqualTo(200));
+        }
+
+        #region Get Notification Template
+        [Test]
+        public void GetNotificationTemplate()
+        {
+            //Expected value will be verify with actual value
+            var expectedValue = &quot;{\r\n \&quot;msgHdr\&quot;: {\r\n\&quot;statusCode\&quot;: 200,\r\n\&quot;status\&quot;: \&quot;Success\&quot;,\r\n\&quot;message\&quot;: null,&quot; +
+                &quot;\r\n\&quot;id\&quot;: 1672227322\r\n},\r\n  \&quot;msgBdy\&quot;: {\r\n\&quot;data\&quot;: {\r\n\&quot;id\&quot;: 23,\r\n\&quot;notificationType\&quot;:&quot; +
+                &quot; \&quot;EMAIL\&quot;,\r\n\&quot;type\&quot;: \&quot;string\&quot;,\r\n\&quot;templateValidUpto\&quot;: \&quot;12/21/2022 10:31:15\&quot;,\r\n\&quot;subject\&quot;: &quot; +
+                &quot;\&quot;Welcome Message !\&quot;,\r\n \&quot;bodyMessage\&quot;: \&quot;Hi,{0} Welcome to INT !\&quot;,\r\n\&quot;requestDevice\&quot;: \&quot;string\&quot;,&quot; +
+                &quot;\r\n\&quot;requestion\&quot;: \&quot;0\&quot;,\r\n\&quot;task\&quot;: null\r\n}\r\n}\r\n}&quot;;
+            _mockObjTemplateServices.Setup(x =&gt; x.GetTemplateByType(It.IsAny&lt;string&gt;(), It.IsAny&lt;int&gt;())).Returns(JsonConvert.DeserializeObject&lt;ApiResponseModel&gt;(expectedValue));
+            var notificationTemplateController = new NotificationTemplateController(_mockObjEmailNotification.Object, _mockObjTemplateServices.Object);
+            var actualValue = notificationTemplateController.GetNotificationTemplate(&quot;E&quot;,23);
+           
+            //Converting actual value as  OkObjectResult
+            OkObjectResult? okObjectActualValue = actualValue as OkObjectResult;
+            var valueForActual = JsonConvert.SerializeObject(okObjectActualValue!.Value);
+            ApiResponseModel? apiResponseModel = JsonConvert.DeserializeObject&lt;ApiResponseModel&gt;(expectedValue);
+            var valueForexpected = JsonConvert.SerializeObject(apiResponseModel);
+            //Compare both value Expected and Actual value
+            Assert.That(valueForActual, Is.EqualTo(valueForexpected));
+        }
+        #endregion
+
+        [Test]
+        public void TestGetTemplateServices()
+        {
+            
+            IEnumerable&lt;NotificationParams&gt; expectedValue = new List&lt;NotificationParams&gt;
+            {
+                new NotificationParams
+                {
+                    ID=23,
+                    NotificationType=&quot;EMAIL&quot;,
+                    Type=&quot;string&quot;,
+                    TemplateValidUpto=&quot;21-12-22&quot;,
+                    Subject=&quot;Welcome Message !&quot;,
+                    BodyMessage=&quot;Hi,{0} Welcome to INT !&quot;,
+                    RequestDevice=&quot;string&quot;,
+                    Requestion=&quot;0&quot;,
+                }
+            };
+            _mockObjGetTemplate.Setup(x =&gt; x.GetTemplateByType(&quot;EMAIL&quot;,23)).Returns(expectedValue);
+            var template = new TemplateServices(_mockObjGetTemplate.Object);
+            var actualValue = template.GetTemplateByType(&quot;EMAIL&quot;,23);
+            var responseObject = new ResponseModel&lt;object&gt; { Data = actualValue.MsgBdy };
+            var responseData = responseObject.Data;
+            ResponseModel&lt;NotificationParams&gt;? responseModel = responseData as ResponseModel&lt;NotificationParams&gt;;
+            var response = responseModel!.Data;
+            Assert.That(response, Is.EqualTo(expectedValue.FirstOrDefault()));
+        }
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[21,9,21,23,1],[22,9,22,10,1],[24,13,24,78,1],[25,13,25,69,1],[26,13,26,63,1],[27,13,27,56,1],[28,9,28,10,1],[33,9,33,10,1],[35,13,47,15,1],[48,13,48,140,1],[49,13,49,151,1],[52,13,62,24,1],[65,13,65,81,1],[68,13,68,80,1],[69,9,69,10,1],[73,9,73,10,1],[74,13,83,15,1],[84,13,84,112,1],[85,13,85,99,1],[86,13,86,93,1],[87,13,87,87,1],[88,13,88,52,1],[89,13,89,112,1],[90,13,90,48,1],[91,13,91,64,1],[92,9,92,10,1],[97,9,97,10,1],[99,13,103,79,1],[104,13,104,179,1],[105,13,105,152,1],[106,13,106,94,1],[109,13,109,81,1],[110,13,110,90,1],[111,13,111,113,1],[112,13,112,82,1],[114,13,114,71,1],[115,9,115,10,1],[120,9,120,10,1],[122,13,135,15,1],[136,13,136,100,1],[137,13,137,77,1],[138,13,138,70,1],[139,13,139,90,1],[140,13,140,52,1],[141,13,141,114,1],[142,13,142,48,1],[143,13,143,79,1],[144,9,144,10,1]]);
+    </script>
+  </body>
+</html>

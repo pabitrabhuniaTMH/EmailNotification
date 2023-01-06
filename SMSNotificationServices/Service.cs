@@ -1,11 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SMSNotificationServices.IRepository;
 using SMSNotificationServices.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SMSNotificationServices
 {
@@ -13,7 +9,7 @@ namespace SMSNotificationServices
     {
         public static IServiceCollection ConfigSMSNotificationService(this IServiceCollection service)
         {
-            service.AddScoped<ISMSNotificationService,SMSNotificationService>();
+            service.AddScoped<ISmsNotificationService,SmsNotificationService>();
             return service;
         }
     }

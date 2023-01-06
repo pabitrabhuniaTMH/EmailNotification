@@ -1,0 +1,9 @@
+﻿C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationGateway\Program.cs
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationGateway\obj\Debug\net6.0\NotificationGateway.GlobalUsings.g.cs
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationGateway\obj\Debug\net6.0\.NETCoreApp,Version=v6.0.AssemblyAttributes.cs
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationGateway\obj\Debug\net6.0\NotificationGateway.AssemblyInfo.cs
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationGateway\obj\Debug\net6.0\NotificationGateway.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationGateway\appsettings.Development.json
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationGateway\appsettings.json
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationGateway\ocelot.json
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationGateway\Properties\launchSettings.json

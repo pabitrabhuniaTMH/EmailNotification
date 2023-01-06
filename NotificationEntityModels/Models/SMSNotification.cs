@@ -1,32 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace NotificationEntityModels.Models
 {
-    public class SMSNotification:BaseEntity
+    public class SmsNotification:BaseEntity
     {
-        public string NAME { get; set; }
-        [IsPhone]
-        public string PHONE { get; set; }
+        public string? NAME { get; set; }
+        [IsPhoneAttribute]
+        public string? PHONE { get; set; }
         public Char NOTIFICATIONTYPE { get; set; }
         public int TEMPLATENO { get; set; }
     }
 
     //Custom Phone Number validation
-    public class IsPhone : ValidationAttribute
+    [ExcludeFromCodeCoverage]
+    public class IsPhoneAttribute : ValidationAttribute
     {
         protected override ValidationResult IsValid(object? value, ValidationContext validationContext)
         {
             try
             {
-                if (!Regex.IsMatch(value.ToString(), "\\A[0-9]{10}\\z"))
+                if(value==null)
+                    throw new InvalidDataException("Phone number should not be null");
+                if (!Regex.IsMatch(value.ToString()!, "\\A[0-9]{10}\\z"))
                     return new ValidationResult("PHONE is not a valid format");
-                return ValidationResult.Success;
+                return ValidationResult.Success!;
             }
             catch (Exception e)
             {

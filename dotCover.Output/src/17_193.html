@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationTemplateServices\Repository\EmailNotificationService.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using NotificationEntityModels.IRepository;
+using NotificationEntityModels.Models;
+using NotificationTemplateServices.IRepository;
+using SMSNotificationServices.ServiceHelper;
+
+namespace NotificationTemplateServices.Repository
+{
+    public class EmailNotificationServices : IEmailNotificationService
+    {
+        private readonly IEmailNotification _emailNotification;
+        private readonly NotificationLog _notificationLog;
+        public EmailNotificationServices(IEmailNotification emailNotification)
+        {
+            _notificationLog = new NotificationLog(TimeStamp.GetTimeStamp());
+            _emailNotification =emailNotification;
+        }
+        #region Save Notification Template
+        public ApiResponseModel SaveNotificationTemplate(EmailNotificationTemplate emailNotificationTemplate)
+        {
+            try
+            {
+                _notificationLog.WriteLogMessage(&quot;-----Services-----  Called SeveNotification&quot;);
+                if (emailNotificationTemplate.NotificationType != &quot;E&quot;)
+                    throw new InvalidDataException(&quot;Notification Type is invalid&quot;);
+                var result = _emailNotification.SeveNotification(emailNotificationTemplate);
+                if (result != 0)
+                {
+                    return new ApiResponseModel
+                    {
+                        MsgHdr = new ResponseModel&lt;BaseResponseModel&gt;
+                        {
+                            Data = new BaseResponseModel
+                            {
+                                ID = TimeStamp.GetTimeStamp(),
+                                StatusCode = 200,
+                                Status = &quot;Success&quot;,
+                                Message = &quot;Data Has Been Successfully saved&quot;
+                            }
+                        }
+                    };                    
+                }
+                throw new InvalidDataException();
+            }
+            catch (InvalidDataException e)
+            {
+                _notificationLog.WriteLogMessage(&quot;-------------------Error-----------------\n  &quot;+e.ToString());
+                return new ApiResponseModel
+                {
+                    MsgHdr = new ResponseModel&lt;BaseResponseModel&gt;
+                    {
+                        Data = new BaseResponseModel
+                        {
+                            ID = TimeStamp.GetTimeStamp(),
+                            StatusCode = 422,
+                            Status = &quot;Failed&quot;,
+                            Message = e.Message
+                        }
+                    }
+                };
+            }
+            
+
+        }
+        #endregion
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[12,9,12,79,1],[13,9,13,10,1],[14,13,14,78,1],[15,13,15,51,1],[16,9,16,10,1],[19,9,19,10,1],[21,13,21,14,1],[22,17,22,97,1],[23,17,23,71,1],[24,21,24,84,1],[25,17,25,93,1],[26,17,26,33,1],[27,17,27,18,1],[28,21,40,23,1],[42,17,42,50,0],[44,13,44,43,1],[45,13,45,14,1],[46,17,46,112,1],[47,17,59,19,1],[63,9,63,10,1]]);
+    </script>
+  </body>
+</html>

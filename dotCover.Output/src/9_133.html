@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationEntityModels\Models\SMSNotification.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
+
+namespace NotificationEntityModels.Models
+{
+    public class SmsNotification:BaseEntity
+    {
+        public string? NAME { get; set; }
+        [IsPhoneAttribute]
+        public string? PHONE { get; set; }
+        public Char NOTIFICATIONTYPE { get; set; }
+        public int TEMPLATENO { get; set; }
+    }
+
+    //Custom Phone Number validation
+    public class IsPhoneAttribute : ValidationAttribute
+    {
+        protected override ValidationResult IsValid(object? value, ValidationContext validationContext)
+        {
+            try
+            {
+                if(value==null)
+                    throw new InvalidDataException(&quot;Phone number should not be null&quot;);
+                if (!Regex.IsMatch(value.ToString()!, &quot;\\A[0-9]{10}\\z&quot;))
+                    return new ValidationResult(&quot;PHONE is not a valid format&quot;);
+                return ValidationResult.Success!;
+            }
+            catch (Exception e)
+            {
+                return new ValidationResult(e.Message);
+            }
+        }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[8,31,8,35,0],[8,36,8,40,1],[10,32,10,36,0],[10,37,10,41,1],[11,40,11,44,0],[11,45,11,49,1],[12,33,12,37,0],[12,38,12,42,1],[19,9,19,10,0],[21,13,21,14,0],[22,17,22,32,0],[23,21,23,87,0],[24,17,24,74,0],[25,21,25,80,0],[26,17,26,50,0],[28,13,28,32,0],[29,13,29,14,0],[30,17,30,56,0],[32,9,32,10,0]]);
+    </script>
+  </body>
+</html>

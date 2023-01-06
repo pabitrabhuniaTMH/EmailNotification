@@ -1,0 +1,5 @@
+﻿C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationTemplateServices\IRepository\IEmailNotificationService.cs
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationTemplateServices\IRepository\ITemplateServices.cs
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationTemplateServices\Repository\EmailNotificationService.cs
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationTemplateServices\Repository\TemplateServices.cs
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationTemplateServices\Service.cs

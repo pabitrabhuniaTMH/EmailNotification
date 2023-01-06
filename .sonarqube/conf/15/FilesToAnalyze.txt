@@ -1,0 +1,5 @@
+﻿C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationTemplateDBAccess\DBHelper\Connection.cs
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationTemplateDBAccess\DBHelper\OracleDynamicParameters.cs
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationTemplateDBAccess\Repository\EmailNotification.cs
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationTemplateDBAccess\Repository\Template.cs
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationTemplateDBAccess\Service.cs

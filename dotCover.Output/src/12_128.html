@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationServices\Repository\EmailNotificationServices.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using NotificationEntityModels.Models;
+using NotificationServices.IRepository;
+using SMSNotificationServices.ServiceHelper;
+using System.Diagnostics.CodeAnalysis;
+using System.Net.Mail;
+using System.Text.RegularExpressions;
+
+namespace NotificationServices.Repository
+{
+    [ExcludeFromCodeCoverage]
+    public class EmailNotificationService : IEmailNotificationServices
+    {
+        public readonly IConfiguration? _configuration;
+        public readonly string? _sendEmail;
+        public readonly string? _sendPassword;
+        private readonly NotificationLog _notificationLog;
+        private readonly string? apiBaseUrl;
+        private static readonly HttpClient _httpClient = new();
+        
+        public EmailNotificationService(IConfiguration configuration)
+        {
+            _notificationLog = new NotificationLog(TimeStamp.GetTimeStamp());
+            apiBaseUrl = configuration.GetSection(&quot;TEMPLATEBYTYPR_API_PATH&quot;).Value;
+            if (_httpClient.BaseAddress==null)
+                _httpClient.BaseAddress = new Uri(apiBaseUrl!);
+            _sendEmail = configuration.GetSection(&quot;MailInfo&quot;).GetSection(&quot;Email&quot;).Value;
+            _sendPassword = configuration.GetSection(&quot;MailInfo&quot;).GetSection(&quot;Password&quot;).Value;
+        }
+        #region send notification to email
+        public async Task&lt;ApiResponseModel&gt; SendNotification(EmailNotification emailNotification)
+        {
+            try
+            {
+                NFType? nFType =(NFType)emailNotification.NotificationType!;
+                if (nFType != NFType.EMAIL)
+                    throw new InvalidDataException(&quot;Notification Type is not a valid type&quot;);
+                ApiResponseModel? apiResponseModel;
+                _notificationLog.WriteLogMessage(&quot;Check Email if valid&quot;);
+
+                //check valid email
+                if (!Regex.IsMatch(emailNotification.NotifyTo!.EMAIL!, @&quot;\A(?:[a-z0-9!#$%&amp;&#39;*+/=?^_`{|}
+                ~-]+(?:\.[a-z0-9!#$%&amp;&#39;*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:
+                [a-z0-9-]*[a-z0-9])?)\Z&quot;, RegexOptions.IgnoreCase))
+                    throw new InvalidDataException(emailNotification.NotifyTo.EMAIL + &quot; Is not a valid email&quot;);
+
+                //Called Get Template API
+                string endpoint = apiBaseUrl + MethodsName.GetTemplate + &quot;?Type=&quot;+ nFType+&quot;&amp;&amp;NotificationId=&quot;+Convert.ToInt32(emailNotification.NotificationTemplateId);
+                _notificationLog.WriteLogMessage(&quot;Get Template API calling  Endpoint: &quot;+endpoint);
+                _httpClient.DefaultRequestHeaders.Accept.Clear();
+                using (var Response = await _httpClient.GetAsync(endpoint))
+                {
+                    var result = await Response.Content.ReadAsStringAsync();
+                    apiResponseModel = JsonConvert.DeserializeObject&lt;ApiResponseModel&gt;(result);
+                }
+                var data = JsonConvert.DeserializeObject&lt;ResponseModel&lt;NotificationParams&gt;&gt;(apiResponseModel!.MsgBdy!.ToString()!);
+                //If Template exsits
+                if (data!.Data == null)
+                    throw new InvalidDataException(&quot;Template is not available&quot;);
+                var username = emailNotification.NotifyTo.NAME;
+                #region Email sending
+                MailMessage mail = new MailMessage();
+                mail.To.Add(emailNotification.NotifyTo.EMAIL!);
+                mail.From = new MailAddress(_sendEmail!);
+                mail.Subject =data.Data.Subject;
+                mail.Body = String.Format(data.Data.BodyMessage!,username);
+                mail.IsBodyHtml = true;
+                using (SmtpClient smtp = new SmtpClient()) //SMTP request
+                {
+                    smtp.Host = &quot;smtp.gmail.com&quot;;
+                    smtp.Port = 587;
+                    smtp.UseDefaultCredentials = false;
+                    smtp.Credentials = new System.Net.NetworkCredential(_sendEmail, _sendPassword);
+                    smtp.EnableSsl = true;
+                    _notificationLog.WriteLogMessage(&quot;Email Sending...&quot;);
+                    smtp.Send(mail);
+                    _notificationLog.WriteLogMessage(&quot;Email successfully sent...&quot;);
+                }
+                #endregion
+
+                return new ApiResponseModel
+                {
+                    MsgHdr = new ResponseModel&lt;BaseResponseModel&gt; {
+                        Data=new BaseResponseModel { 
+                            ID=TimeStamp.GetTimeStamp(),
+                            Status=&quot;Success&quot;,
+                            StatusCode=200,
+                            Message=&quot;Email Notification successfullly sent&quot;
+                        }
+                    }
+                };
+            }
+            catch (Exception ex)
+            {
+                _notificationLog.WriteLogMessage(ex.ToString());
+                return new ApiResponseModel
+                {
+                    MsgHdr = new ResponseModel&lt;BaseResponseModel&gt;
+                    {
+                        Data = new BaseResponseModel
+                        {
+                            ID = TimeStamp.GetTimeStamp(),
+                            Status = &quot;Failed&quot;,
+                            StatusCode = 400,
+                            Message = ex.ToString()
+                        }
+                    }
+                };
+            }
+            
+        }
+        #endregion
+
+    }
+
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[20,9,20,64,0],[22,9,22,70,0],[23,9,23,10,0],[24,13,24,78,0],[25,13,25,84,0],[26,13,26,47,0],[27,17,27,64,0],[28,13,28,89,0],[29,13,29,95,0],[30,9,30,10,0],[33,9,33,10,0],[35,13,35,14,0],[36,17,36,77,0],[37,17,37,44,0],[38,21,38,93,0],[40,17,40,74,0],[43,17,45,68,0],[46,21,46,112,0],[49,17,49,169,0],[50,17,50,99,0],[51,17,51,66,0],[52,24,52,75,0],[53,17,53,18,0],[54,21,54,77,0],[55,21,55,96,0],[56,17,56,18,0],[57,17,57,132,0],[59,17,59,40,0],[60,21,60,81,0],[61,17,61,64,0],[63,17,63,54,0],[64,17,64,64,0],[65,17,65,58,0],[66,17,66,49,0],[67,17,67,76,0],[68,17,68,40,0],[69,24,69,58,0],[70,17,70,18,0],[71,21,71,50,0],[72,21,72,37,0],[73,21,73,56,0],[74,21,74,100,0],[75,21,75,43,0],[76,21,76,74,0],[77,21,77,37,0],[78,21,78,84,0],[79,17,79,18,0],[82,17,92,19,0],[94,13,94,33,0],[95,13,95,14,0],[96,17,96,65,0],[97,17,109,19,0],[112,9,112,10,0]]);
+    </script>
+  </body>
+</html>

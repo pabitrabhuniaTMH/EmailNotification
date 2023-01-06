@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationTemplateServices\Repository\TemplateServices.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using NotificationEntityModels.IRepository;
+using NotificationEntityModels.Models;
+using NotificationTemplateServices.IRepository;
+using SMSNotificationServices.ServiceHelper;
+
+namespace NotificationTemplateServices.Repository
+{
+    public class TemplateServices : ITemplateServices
+    {
+        private readonly ITemplate _template;
+        public TemplateServices(ITemplate template)
+        {
+            _template=template;
+        }
+        #region Get Template
+
+        public ApiResponseModel GetTemplateByType(string type,int NotificationId)
+        {
+            try
+            {
+                if (type == null || type == &quot;&quot;)
+                    throw new InvalidDataException(&quot;Type Should Not Be Bull&quot;);
+                var result=_template.GetTemplateByType(type!, NotificationId);
+                if (result!=null)
+                {
+                    return new ApiResponseModel
+                    {
+                        MsgHdr = new BaseResponseModel
+                        {
+                            ID = TimeStamp.GetTimeStamp(),
+                            Status = &quot;Success&quot;,
+                            StatusCode = 200
+                        },
+                        MsgBdy = new ResponseModel&lt;NotificationParams&gt;
+                        {
+                            Data = result.FirstOrDefault()
+                        }
+                    };
+                }
+                throw new InvalidDataException();
+            }
+            catch(InvalidDataException e)
+            {
+                return new ApiResponseModel
+                {
+                    MsgHdr = new BaseResponseModel
+                    {
+                        ID = TimeStamp.GetTimeStamp(),
+                        Status = &quot;Failed&quot;,
+                        StatusCode = 422,
+                        Message = e.Message
+                    }
+                };
+            }
+        }
+        #endregion
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[11,9,11,52,1],[12,9,12,10,1],[13,13,13,32,1],[14,9,14,10,1],[18,9,18,10,1],[20,13,20,14,1],[21,17,21,48,1],[22,21,22,79,1],[23,17,23,79,1],[24,17,24,34,1],[25,17,25,18,1],[26,21,38,23,1],[40,17,40,50,0],[42,13,42,42,1],[43,13,43,14,1],[44,17,53,19,1],[55,9,55,10,1]]);
+    </script>
+  </body>
+</html>

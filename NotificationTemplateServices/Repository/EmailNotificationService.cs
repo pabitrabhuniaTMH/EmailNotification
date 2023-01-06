@@ -1,19 +1,17 @@
 ﻿using NotificationEntityModels.IRepository;
 using NotificationEntityModels.Models;
 using NotificationTemplateServices.IRepository;
-using OTPServices.ServiceHelper;
+using SMSNotificationServices.ServiceHelper;
 
 namespace NotificationTemplateServices.Repository
 {
-    public class EmailNotificationService : IEmailNotificationService
+    public class EmailNotificationServices : IEmailNotificationService
     {
         private readonly IEmailNotification _emailNotification;
         private readonly NotificationLog _notificationLog;
-        private readonly long _timeStamp;
-        public EmailNotificationService(IEmailNotification emailNotification)
+        public EmailNotificationServices(IEmailNotification emailNotification)
         {
-            _timeStamp = TimeStamp.GetTimeStamp();
-            _notificationLog = new NotificationLog(_timeStamp);
+            _notificationLog = new NotificationLog(TimeStamp.GetTimeStamp());
             _emailNotification =emailNotification;
         }
         #region Save Notification Template
@@ -22,6 +20,8 @@ namespace NotificationTemplateServices.Repository
             try
             {
                 _notificationLog.WriteLogMessage("-----Services-----  Called SeveNotification");
+                if (emailNotificationTemplate.NotificationType != "E")
+                    throw new InvalidDataException("Notification Type is invalid");
                 var result = _emailNotification.SeveNotification(emailNotificationTemplate);
                 if (result != 0)
                 {
@@ -39,21 +39,9 @@ namespace NotificationTemplateServices.Repository
                         }
                     };                    
                 }
-                return new ApiResponseModel
-                {
-                    MsgHdr = new ResponseModel<BaseResponseModel>
-                    {
-                        Data = new BaseResponseModel
-                        {
-                            ID = TimeStamp.GetTimeStamp(),
-                            StatusCode = 422,
-                            Status = "Failed",
-                            Message = "There is a internal error"
-                        }
-                    }
-                };
+                throw new InvalidDataException();
             }
-            catch (Exception e)
+            catch (InvalidDataException e)
             {
                 _notificationLog.WriteLogMessage("-------------------Error-----------------\n  "+e.ToString());
                 return new ApiResponseModel

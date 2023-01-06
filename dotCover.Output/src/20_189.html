@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationTemplate\Program.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using NotificationTemplateDBAccess;
+using NotificationTemplateServices;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.ConfigNotificationTemplateDBAccess();
+builder.Services.ConfigNotificationTemplateService();
+builder.Services.AddControllers();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[4,1,4,50,0],[7,1,7,55,0],[8,1,8,54,0],[9,1,9,35,0],[11,1,11,44,0],[12,1,12,34,0],[14,1,14,27,0],[17,1,17,37,0],[18,1,18,2,0],[19,5,19,22,0],[20,5,20,24,0],[21,1,21,2,0],[23,1,23,27,0],[25,1,25,24,0],[27,1,27,22,0],[29,1,29,11,0]]);
+    </script>
+  </body>
+</html>

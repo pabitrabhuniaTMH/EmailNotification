@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Pabitra Bhunia\source\EmailNotification GIT\SMSNotificationServices\Service.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Microsoft.Extensions.DependencyInjection;
+using SMSNotificationServices.IRepository;
+using SMSNotificationServices.Repository;
+using System.Diagnostics.CodeAnalysis;
+
+namespace SMSNotificationServices
+{
+    public static class Service
+    {
+        public static IServiceCollection ConfigSMSNotificationService(this IServiceCollection service)
+        {
+            service.AddScoped&lt;ISmsNotificationService,SmsNotificationService&gt;();
+            return service;
+        }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[11,9,11,10,1],[12,13,12,81,1],[13,13,13,28,1],[14,9,14,10,1]]);
+    </script>
+  </body>
+</html>

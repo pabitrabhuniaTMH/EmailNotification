@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using NotificationEntityModels.Models;
 using NotificationTemplateServices.IRepository;
-using OTPServices.ServiceHelper;
+using SMSNotificationServices.ServiceHelper;
 
 namespace NotificationTemplate.Controllers
 {
@@ -13,11 +13,9 @@ namespace NotificationTemplate.Controllers
         private readonly IEmailNotificationService _emailNotificationService;
         private readonly ITemplateServices _templateServices;
         private readonly NotificationLog _notificationLog;
-        private readonly long _timeStamp;
         public NotificationTemplateController(IEmailNotificationService emailNotificationService,ITemplateServices templateServices)
         {
-            _timeStamp = TimeStamp.GetTimeStamp();
-            _notificationLog = new NotificationLog(_timeStamp);
+            _notificationLog = new NotificationLog(TimeStamp.GetTimeStamp());
             _emailNotificationService =emailNotificationService;
             _templateServices=templateServices;
         }

@@ -1,13 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using NotificationEntityModels.IRepository;
-using NotificationTemplateDBAccess.Repository;
 using NotificationTemplateServices.IRepository;
 using NotificationTemplateServices.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics.CodeAnalysis;
 
 namespace NotificationTemplateServices
 {
@@ -15,7 +9,7 @@ namespace NotificationTemplateServices
     {
         public static IServiceCollection ConfigNotificationTemplateService(this IServiceCollection service)
         {
-            service.AddScoped<IEmailNotificationService, EmailNotificationService>();
+            service.AddScoped<IEmailNotificationService, EmailNotificationServices>();
             service.AddScoped<ITemplateServices, TemplateServices>();
             return service;
         }

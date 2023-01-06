@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Pabitra Bhunia\source\EmailNotification GIT\UnitTestEmailBasedNotification\UnitTest.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
+using Moq;
+using NotificationEntityModels.Models;
+using NotificationServices;
+using NotificationServices.IRepository;
+using NotificationSystem.Controllers;
+using SMSNotificationServices.ServiceHelper;
+
+namespace UnitTestEmailBasedNotification
+{
+    public static class Tests
+    {
+        #region Test SendNotification To Email
+
+        [Test]
+        public static void TestSendNotificationToEmail()
+        {
+            //Input Value
+            var InputValue = new EmailNotification
+            {
+                NotificationTemplateId = &quot;23&quot;,
+                NotificationType = &#39;E&#39;,
+                NotifyTo = new NotifyTo
+                {
+                    ID = 321654,
+                    NAME = &quot;Pabitra Bhunia&quot;,
+                    EMAIL = &quot;pabitra.bhunia@indusnet.co.in&quot;
+                }
+            };
+            var mockObj = new Mock&lt;IEmailNotificationServices&gt;();
+            //Expected value will be verify with actual value
+            var expectedValue = ConvertToTask();
+            mockObj.Setup(x =&gt; x.SendNotification(It.IsAny&lt;EmailNotification&gt;())).Returns(expectedValue);
+            var SendNotificationToEmailController = new SendNotificationToEmailController(mockObj.Object);
+            var actualValue= SendNotificationToEmailController.SendNotificationToEmail(InputValue);
+
+            //Converting actual vaue as  OkObjectResult
+            OkObjectResult? okObjectActualValue = actualValue.Result as OkObjectResult;
+            ApiResponseModel okObjectexpectedValue = expectedValue.Result;
+
+            //Compare both value Expected and Actual value
+            Assert.That(okObjectActualValue!.Value, Is.EqualTo(okObjectexpectedValue));
+        }
+
+        #endregion
+
+        #region Converting ApiResponseModel
+        //Converting for System.Thread.Task type
+        private static async Task&lt;ApiResponseModel&gt; ConvertToTask()
+        {
+            await Task.Delay(10000);
+            return new ApiResponseModel
+            {
+                MsgHdr = new ResponseModel&lt;BaseResponseModel&gt;
+                {
+                    Data = new BaseResponseModel
+                    {
+                        ID = TimeStamp.GetTimeStamp(),
+                        Status = &quot;Success&quot;,
+                        StatusCode = 200,
+                        Message = &quot;Email Notification successfullly sent&quot;
+                    }
+                }
+            };
+        }
+        #endregion
+
+        [Test]
+        public static void TestConfigNotificationService()
+        {
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.ConfigNotificationService();
+            var serviceProvider = serviceCollection.BuildServiceProvider();
+            Assert.NotNull(serviceProvider);
+        }
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[18,9,18,10,1],[20,13,30,15,1],[31,13,31,66,1],[33,13,33,49,1],[34,13,34,106,1],[35,13,35,107,1],[36,13,36,100,1],[39,13,39,88,1],[40,13,40,75,1],[43,13,43,88,1],[44,9,44,10,1],[51,9,51,10,1],[52,13,52,37,1],[53,13,65,15,1],[66,9,66,10,1],[71,9,71,10,1],[72,13,72,61,1],[73,13,73,59,1],[74,13,74,76,1],[75,13,75,45,1],[76,9,76,10,1]]);
+    </script>
+  </body>
+</html>

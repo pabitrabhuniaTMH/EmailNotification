@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Pabitra Bhunia\source\EmailNotification GIT\SMSNotificationServices\Repository\SMSNotificationService.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using NotificationEntityModels.Models;
+using SMSNotificationServices.ServiceHelper;
+using SMSNotificationServices.IRepository;
+using Twilio;
+using Twilio.Rest.Api.V2010.Account;
+
+
+namespace SMSNotificationServices.Repository
+{
+    public class SmsNotificationService : ISmsNotificationService
+    {
+        public readonly IConfiguration? _configuration;
+        private  readonly string? apiBaseUrl;
+        private  readonly HttpClient _httpClient = new();
+        private readonly string? _accountSID;
+        private readonly string? _authToken;
+        private readonly string? _fromPhone;
+        private readonly NotificationLog _notificationLog;
+        public SmsNotificationService(IConfiguration configuration)
+        {
+            _notificationLog = new NotificationLog(TimeStamp.GetTimeStamp());
+            _accountSID = configuration.GetSection(&quot;SMSService&quot;).GetSection(&quot;AccountSID&quot;).Value;
+            _authToken = configuration.GetSection(&quot;SMSService&quot;).GetSection(&quot;AuthToken&quot;).Value;
+            _fromPhone= configuration.GetSection(&quot;SMSService&quot;).GetSection(&quot;FromPhone&quot;).Value;
+            apiBaseUrl = configuration.GetSection(&quot;TEMPLATEBYTYPR_API_PATH&quot;).Value;
+            if (_httpClient.BaseAddress == null)
+                _httpClient.BaseAddress = new Uri(apiBaseUrl!);
+        }
+        #region SendNotification
+        public async Task&lt;ApiResponseModel&gt; SendNotification(SmsNotification sMSNotification)
+        {
+            try
+            {
+                NFType? nFType = (NFType)sMSNotification.NOTIFICATIONTYPE;
+                if (nFType != NFType.SMS)
+                    throw new InvalidDataException(&quot;Notification Type is not a valid type&quot;);
+
+                _notificationLog.WriteLogMessage(&quot;Checking Phone Number  &quot;+sMSNotification.PHONE);
+                ApiResponseModel? apiResponseModel;
+                if (sMSNotification.PHONE == null &amp;&amp; sMSNotification.PHONE == &quot;&quot;)
+                    throw new InvalidDataException(&quot;Phone Number should not be null&quot;);
+
+                #region Calling Get Template API
+                //Calling Get Template API
+                string endpoint = apiBaseUrl + MethodsName.GetTemplate + &quot;?Type=&quot; + nFType + &quot;&amp;&amp;NotificationId=&quot; + Convert.ToInt32(sMSNotification.TEMPLATENO);
+                _notificationLog.WriteLogMessage(&quot;Get Template API calling  Endpoint: &quot; + endpoint);
+                _httpClient.DefaultRequestHeaders.Accept.Clear();
+                using (var Response = await _httpClient.GetAsync(endpoint))
+                {
+                    var result = await Response.Content.ReadAsStringAsync();
+                    apiResponseModel = JsonConvert.DeserializeObject&lt;ApiResponseModel&gt;(result);
+                }
+                var data = JsonConvert.DeserializeObject&lt;ResponseModel&lt;NotificationParams&gt;&gt;(apiResponseModel!.MsgBdy!.ToString()!);
+                
+                //If Template exsits
+                if (data!.Data == null)
+                    throw new InvalidDataException(&quot;Template is not available&quot;);
+
+                #endregion End API Call
+
+                //Sending SMS using Twilio
+                TwilioClient.Init(_accountSID, _authToken);
+                var username = sMSNotification.NAME;
+                var message = MessageResource.Create(from: new Twilio.Types.PhoneNumber(_fromPhone), 
+                    body: String.Format(data.Data.BodyMessage!, username), to: new Twilio.Types.PhoneNumber(&quot;+91&quot; + sMSNotification.PHONE));
+                _notificationLog.WriteLogMessage(&quot;MSG Successfully sent  Ref Id: &quot;+message);
+                //END
+
+                return new ApiResponseModel
+                {
+                    MsgHdr = new BaseResponseModel
+                    {
+                        ID = TimeStamp.GetTimeStamp(),
+                        StatusCode = 200,
+                        Status = &quot;Success&quot;,
+                        Message = &quot;SMS Notification Successfully Sent&quot;
+                    },
+                    MsgBdy = new ResponseModel&lt;string&gt; { Data = message.Sid },
+                };
+            }
+            catch (Exception e)
+            {
+                _notificationLog.WriteLogMessage(&quot;------------------Error------------------\n  &quot;+e.ToString());
+                return new ApiResponseModel
+                {
+                    MsgHdr = new BaseResponseModel
+                    {
+                        ID = TimeStamp.GetTimeStamp(),
+                        StatusCode = 422,
+                        Status = &quot;Failed&quot;,
+                        Message = e.Message
+                    }
+                };
+            }
+            
+        }
+        #endregion 
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[16,9,16,58,0],[21,9,21,68,0],[22,9,22,10,0],[23,13,23,78,0],[24,13,24,97,0],[25,13,25,95,0],[26,13,26,94,0],[27,13,27,84,0],[28,13,28,49,0],[29,17,29,64,0],[30,9,30,10,0],[33,9,33,10,0],[35,13,35,14,0],[36,17,36,75,0],[37,17,37,42,0],[38,21,38,93,0],[40,17,40,99,0],[42,17,42,82,0],[43,21,43,87,0],[47,17,47,160,0],[48,17,48,101,0],[49,17,49,66,0],[50,24,50,75,0],[51,17,51,18,0],[52,21,52,77,0],[53,21,53,96,0],[54,17,54,18,0],[55,17,55,132,0],[58,17,58,40,0],[59,21,59,81,0],[64,17,64,60,0],[65,17,65,53,0],[66,17,67,141,0],[68,17,68,93,0],[71,17,81,19,0],[83,13,83,32,0],[84,13,84,14,0],[85,17,85,112,0],[86,17,95,19,0],[98,9,98,10,0]]);
+    </script>
+  </body>
+</html>

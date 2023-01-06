@@ -1,19 +1,23 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NotificationEntityModels.Models;
+using NotificationServices;
 using NotificationServices.IRepository;
 using NotificationSystem.Controllers;
-using EmailNotificationServices.ServiceHelper;
+using SMSNotificationServices.ServiceHelper;
 
 namespace UnitTestEmailBasedNotification
 {
-    public class Tests
+    public static class Tests
     {
         #region Test SendNotification To Email
 
         [Test]
-        public void TestSendNotificationToEmail()
+        public static void TestSendNotificationToEmail()
         {
+
             //Input Value
             var InputValue = new EmailNotification
             {
@@ -26,29 +30,28 @@ namespace UnitTestEmailBasedNotification
                     EMAIL = "pabitra.bhunia@indusnet.co.in"
                 }
             };
-
+            var mockObj = new Mock<IEmailNotificationServices>();
             //Expected value will be verify with actual value
-            var expectedValue = methodAsync();
-            Mock<IEmailNotificationServices> mockObj = new Mock<IEmailNotificationServices>();
+            var expectedValue = ConvertToTask();
             mockObj.Setup(x => x.SendNotification(It.IsAny<EmailNotification>())).Returns(expectedValue);
             var SendNotificationToEmailController = new SendNotificationToEmailController(mockObj.Object);
             var actualValue= SendNotificationToEmailController.SendNotificationToEmail(InputValue);
 
             //Converting actual vaue as  OkObjectResult
             OkObjectResult? okObjectActualValue = actualValue.Result as OkObjectResult;
-            ApiResponseModel okObjectexpectedValue = expectedValue.Result as ApiResponseModel;
+            ApiResponseModel okObjectexpectedValue = expectedValue.Result;
 
             //Compare both value Expected and Actual value
-            Assert.That(okObjectActualValue.Value, Is.EqualTo(okObjectexpectedValue));
+            Assert.That(okObjectActualValue!.Value, Is.EqualTo(okObjectexpectedValue));
         }
 
         #endregion
 
         #region Converting ApiResponseModel
         //Converting for System.Thread.Task type
-        private async Task<ApiResponseModel> methodAsync()
+        private static async Task<ApiResponseModel> ConvertToTask()
         {
-            await Task.Delay(10000);
+            await Task.Delay(1000);
             return new ApiResponseModel
             {
                 MsgHdr = new ResponseModel<BaseResponseModel>
@@ -64,5 +67,14 @@ namespace UnitTestEmailBasedNotification
             };
         }
         #endregion
+
+        [Test]
+        public static void TestConfigNotificationService()
+        {
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.ConfigNotificationService();
+            var serviceProvider = serviceCollection.BuildServiceProvider();
+            Assert.NotNull(serviceProvider);
+        }
     }
 }

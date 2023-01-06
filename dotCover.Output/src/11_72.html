@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationEntityModels\CustomException\InvalidDataException.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System.Runtime.Serialization;
+
+namespace NotificationEntityModels.CustomException
+{
+    [Serializable]
+    public class InvalidDataException : Exception
+    {
+        public InvalidDataException() { }
+
+        public InvalidDataException(string name)
+            : base(String.Format(name))
+        {
+
+        }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[8,9,8,38,0],[8,39,8,40,0],[8,41,8,42,0],[11,15,11,40,0],[12,9,12,10,0],[14,9,14,10,0]]);
+    </script>
+  </body>
+</html>

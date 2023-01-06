@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Pabitra Bhunia\source\EmailNotification GIT\SMSBasedNotification\Controllers\SendSMSNotificationController.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using NotificationEntityModels.Models;
+using SMSNotificationServices.IRepository;
+using SMSNotificationServices.ServiceHelper;
+namespace SMSBasedNotification.Controllers
+{
+    [Route(&quot;api/v0.0.1/[controller]&quot;)]
+    [ApiController]
+    public class SendNotificationToSmsController : ControllerBase
+    {
+        private readonly ISmsNotificationService _sMSNotificationService;
+        private readonly NotificationLog _notificationLog;
+        public SendNotificationToSmsController(ISmsNotificationService sMSNotificationService)
+        {
+            _notificationLog = new NotificationLog(TimeStamp.GetTimeStamp());
+            _sMSNotificationService = sMSNotificationService;
+        }
+        [HttpPost(&quot;SendNotificationToSMS&quot;)]
+        public async Task&lt;IActionResult&gt; SendNotificationToSMS([FromBody]SmsNotification sMSNotification)
+        {
+            _notificationLog.WriteLogMessage(&quot;Sending SMS notification&quot;);
+            var result = await _sMSNotificationService.SendNotification(sMSNotification);
+            return Ok(result);
+        }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[14,9,14,95,1],[15,9,15,10,1],[16,13,16,78,1],[17,13,17,62,1],[18,9,18,10,1],[21,9,21,10,1],[22,13,22,74,1],[23,13,23,90,1],[24,13,24,31,1],[25,9,25,10,1]]);
+    </script>
+  </body>
+</html>

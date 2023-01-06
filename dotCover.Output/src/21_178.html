@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationTemplateServices\Service.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Microsoft.Extensions.DependencyInjection;
+using NotificationTemplateServices.IRepository;
+using NotificationTemplateServices.Repository;
+using System.Diagnostics.CodeAnalysis;
+
+namespace NotificationTemplateServices
+{
+    [ExcludeFromCodeCoverage]
+    public static class Service
+    {
+        public static IServiceCollection ConfigNotificationTemplateService(this IServiceCollection service)
+        {
+            service.AddScoped&lt;IEmailNotificationService, EmailNotificationServices&gt;();
+            service.AddScoped&lt;ITemplateServices, TemplateServices&gt;();
+            return service;
+        }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[12,9,12,10,0],[13,13,13,87,0],[14,13,14,70,0],[15,13,15,28,0],[16,9,16,10,0]]);
+    </script>
+  </body>
+</html>

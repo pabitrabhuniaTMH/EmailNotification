@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationTemplateDBAccess\Repository\Template.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Dapper;
+using Microsoft.Extensions.Configuration;
+using NotificationEntityModels.IRepository;
+using NotificationEntityModels.Models;
+using Oracle.ManagedDataAccess.Client;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Runtime.Intrinsics.Arm;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace NotificationTemplateDBAccess.Repository
+{
+    public class Template : ITemplate
+    {
+        private readonly string? _connectionString;
+        public Template(IConfiguration configuration)
+        {
+            _connectionString = configuration.GetConnectionString(&quot;DefaultConnection&quot;);
+        }
+        #region Get Notification Template
+        public IEnumerable&lt;NotificationParams&gt; GetTemplateByType(string type,int NotificationId)
+        {
+            //Fatching Notification Template using dapper
+            using (var db = new OracleConnection(_connectionString))
+            {
+                var result = db.Query&lt;NotificationParams&gt;(&quot;SELECT * FROM TBL_NOTIFICATIONTEMPLATE WHERE NOTIFICATIONTYPE=&#39;&quot;+type+&quot;&#39; AND ID=&quot;+NotificationId+&quot;&quot;);
+                
+                return result;
+            }
+            
+        }
+        #endregion
+
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[19,9,19,54,0],[20,9,20,10,0],[21,13,21,88,0],[22,9,22,10,0],[25,9,25,10,0],[27,20,27,68,0],[28,13,28,14,0],[29,17,29,161,0],[31,17,31,31,0],[34,9,34,10,0]]);
+    </script>
+  </body>
+</html>

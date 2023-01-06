@@ -31,11 +31,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationTemplateService
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationTemplateDBAccess", "NotificationTemplateDBAccess\NotificationTemplateDBAccess.csproj", "{CE58B92D-01F7-402F-9AA8-9208F2577CDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestNotificationTemplate", "UnitTestNotificationTemplate\UnitTestNotificationTemplate.csproj", "{D7C519C6-A320-4412-AA9A-48390F011E46}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTestNotificationTemplate", "UnitTestNotificationTemplate\UnitTestNotificationTemplate.csproj", "{D7C519C6-A320-4412-AA9A-48390F011E46}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestEmailBasedNotification", "UnitTestEmailBasedNotification\UnitTestEmailBasedNotification.csproj", "{A0BBDA30-0387-4998-A1C1-6819E1691E0A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTestEmailBasedNotification", "UnitTestEmailBasedNotification\UnitTestEmailBasedNotification.csproj", "{A0BBDA30-0387-4998-A1C1-6819E1691E0A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestSMSBaseNotification", "UnitTestSMSBaseNotification\UnitTestSMSBaseNotification.csproj", "{364B5D9A-1F3D-420A-A961-3F98547D5F90}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTestSMSBaseNotification", "UnitTestSMSBaseNotification\UnitTestSMSBaseNotification.csproj", "{364B5D9A-1F3D-420A-A961-3F98547D5F90}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

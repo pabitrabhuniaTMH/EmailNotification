@@ -1,0 +1,72 @@
+{
+  "$schema": "http://json.schemastore.org/sarif-1.0.0",
+  "version": "1.0.0",
+  "runs": [
+    {
+      "tool": {
+        "name": "Microsoft (R) Visual C# Compiler",
+        "version": "4.3.0.0",
+        "fileVersion": "4.3.0-3.22365.10 (dd078d4e)",
+        "semanticVersion": "4.3.0",
+        "language": "en-US"
+      },
+      "results": [
+        {
+          "ruleId": "S3925",
+          "level": "warning",
+          "message": "Update this implementation of 'ISerializable' to conform to the recommended serialization pattern.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/Pabitra%20Bhunia/source/EmailNotification%20GIT/NotificationEntityModels/CustomException/InvalidDataException.cs",
+                "region": {
+                  "startLine": 8,
+                  "startColumn": 18,
+                  "endLine": 8,
+                  "endColumn": 38
+                }
+              }
+            }
+          ],
+          "relatedLocations": [
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/Pabitra%20Bhunia/source/EmailNotification%20GIT/NotificationEntityModels/CustomException/InvalidDataException.cs",
+                "region": {
+                  "startLine": 8,
+                  "startColumn": 12,
+                  "endLine": 8,
+                  "endColumn": 17
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "0": "Add a 'protected' constructor 'InvalidDataException(SerializationInfo, StreamingContext)'."
+            }
+          }
+        }
+      ],
+      "rules": {
+        "S3925": {
+          "id": "S3925",
+          "shortDescription": "\"ISerializable\" should be implemented correctly",
+          "fullDescription": "The ISerializable interface is the mechanism to control the type serialization process. If not implemented correctly this could result in an invalid serialization and hard to detect bugs.",
+          "defaultLevel": "warning",
+          "helpUri": "https://rules.sonarsource.com/csharp/RSPEC-3925",
+          "properties": {
+            "category": "Major Code Smell",
+            "isEnabledByDefault": true,
+            "tags": [
+              "C#",
+              "SonarWay",
+              "MainSourceScope"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

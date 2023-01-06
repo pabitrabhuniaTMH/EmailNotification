@@ -1,0 +1,15 @@
+﻿C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationSystem\Controllers\SendNotificationToEmailController.cs
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationSystem\Program.cs
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationSystem\obj\Debug\net6.0\EmailBasedNotification.GlobalUsings.g.cs
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationSystem\obj\Debug\net6.0\.NETCoreApp,Version=v6.0.AssemblyAttributes.cs
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationSystem\obj\Debug\net6.0\EmailBasedNotification.AssemblyInfo.cs
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationSystem\obj\Debug\net6.0\EmailBasedNotification.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationSystem\appsettings.Development.json
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationSystem\appsettings.json
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationSystem\Logs\01-05-2023-1672915190.txt
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationSystem\Logs\01-05-2023-1672915290.txt
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationSystem\Logs\01-05-2023-1672915317.txt
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationSystem\Logs\01-05-2023-1672915331.txt
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationSystem\Logs\01-05-2023-1672915358.txt
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationSystem\Logs\12-30-2022-1672411088.txt
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationSystem\Properties\launchSettings.json

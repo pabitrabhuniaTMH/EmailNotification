@@ -3,14 +3,6 @@ using Microsoft.Extensions.Configuration;
 using NotificationEntityModels.IRepository;
 using NotificationEntityModels.Models;
 using Oracle.ManagedDataAccess.Client;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Runtime.Intrinsics.Arm;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace NotificationTemplateDBAccess.Repository
 {
     public class Template : ITemplate
@@ -24,7 +16,7 @@ namespace NotificationTemplateDBAccess.Repository
         public IEnumerable<NotificationParams> GetTemplateByType(string type,int NotificationId)
         {
             //Fatching Notification Template using dapper
-            using (var db = new OracleConnection(_connectionString))
+            using(var db = new OracleConnection(_connectionString))
             {
                 var result = db.Query<NotificationParams>("SELECT * FROM TBL_NOTIFICATIONTEMPLATE WHERE NOTIFICATIONTYPE='"+type+"' AND ID="+NotificationId+"");
                 

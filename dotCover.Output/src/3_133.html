@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationEntityModels\ServiceHelper\NotificationLog.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System.Diagnostics.CodeAnalysis;
+
+namespace SMSNotificationServices.ServiceHelper
+{
+    [ExcludeFromCodeCoverage]
+    public class NotificationLog
+    {
+        private readonly long _timeStamp;
+        public NotificationLog(long timeStamp)
+        {
+            _timeStamp = timeStamp;
+        }
+        #region WriteLogMessage
+        public void WriteLogMessage(string logMessage)
+        {
+            StreamWriter log;
+            FileStream? fileStream = null;
+            DirectoryInfo? logDirInfo = null;
+            FileInfo logFileInfo;
+            string logFilePath = Environment.CurrentDirectory+&quot;\\Logs\\&quot;;
+            logFilePath = logFilePath + DateTime.Today.ToString(&quot;MM-dd-yyyy&quot;) + &quot;-&quot; + _timeStamp.ToString() + &quot;.&quot; + &quot;txt&quot;;
+            logFileInfo = new FileInfo(logFilePath);
+            logDirInfo = new DirectoryInfo(logFileInfo.DirectoryName!);
+            if (!logDirInfo.Exists) logDirInfo.Create();
+            if (!logFileInfo.Exists)
+            {
+                fileStream = logFileInfo.Create();
+            }
+            else
+            {
+                fileStream = new FileStream(logFilePath, FileMode.Append);
+            }
+            log = new StreamWriter(fileStream);
+            log.Write(&quot;\r\n--------------------------------------------------------------------------------------------&quot;);
+            log.Write(&quot;\r\nLog Details : {0}&quot;, DateTime.Now.ToString(&quot;yyyy-MM-dd HH:mm:ss.fff&quot;));
+            log.Write(&quot;\r\nLog Message : {0}&quot;, logMessage);
+            log.Write(&quot;\r\n--------------------------------------------------------------------------------------------&quot;);
+            log.Close();
+        }
+        #endregion End WriteLogMessage
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[9,9,9,47,1],[10,9,10,10,1],[11,13,11,36,1],[12,9,12,10,1],[15,9,15,10,1],[17,13,17,43,1],[18,13,18,46,1],[20,13,20,74,1],[21,13,21,123,1],[22,13,22,53,1],[23,13,23,72,1],[24,13,24,36,1],[24,37,24,57,0],[25,13,25,37,1],[26,13,26,14,1],[27,17,27,51,1],[28,13,28,14,1],[30,13,30,14,1],[31,17,31,75,1],[32,13,32,14,1],[33,13,33,48,1],[34,13,34,123,1],[35,13,35,98,1],[36,13,36,60,1],[37,13,37,123,1],[38,13,38,25,1],[39,9,39,10,1]]);
+    </script>
+  </body>
+</html>

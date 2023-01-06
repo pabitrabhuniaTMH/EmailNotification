@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\NotificationServices\EmailNotificationServices.csproj" />
     <ProjectReference Include="..\NotificationTemplate\NotificationTemplate.csproj" />
   </ItemGroup>
 

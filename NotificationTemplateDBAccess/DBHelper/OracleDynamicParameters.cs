@@ -3,18 +3,20 @@ using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace NotificationTemplateDBAccess.DBHelper
 {
+    [ExcludeFromCodeCoverage]
     public class OracleDynamicParameters : SqlMapper.IDynamicParameters
     {
         private readonly DynamicParameters dynamicParameters = new DynamicParameters();
         private readonly List<OracleParameter> oracleParameters = new List<OracleParameter>();
 
-        public void Add(string name, OracleDbType oracleDbType, ParameterDirection direction, object value = null, int? size = null)
+        public void Add(string name, OracleDbType oracleDbType, ParameterDirection direction, object? value = null, int? size = null)
         {
             OracleParameter oracleParameter;
             if (size.HasValue)
@@ -29,11 +31,7 @@ namespace NotificationTemplateDBAccess.DBHelper
             oracleParameters.Add(oracleParameter);
         }
 
-        public void Add(string name, OracleDbType oracleDbType, ParameterDirection direction)
-        {
-            var oracleParameter = new OracleParameter(name, oracleDbType, direction);
-            oracleParameters.Add(oracleParameter);
-        }
+        
         public void AddParameters(IDbCommand command, SqlMapper.Identity identity)
         {
             ((SqlMapper.IDynamicParameters)dynamicParameters).AddParameters(command, identity);

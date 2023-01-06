@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationTemplate\Controllers\NotificationTemplateController.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using NotificationEntityModels.Models;
+using NotificationTemplateServices.IRepository;
+using SMSNotificationServices.ServiceHelper;
+
+namespace NotificationTemplate.Controllers
+{
+    [Route(&quot;api/v0.0.1/[controller]&quot;)]
+    [ApiController]
+    public class NotificationTemplateController : ControllerBase
+    {
+        private readonly IEmailNotificationService _emailNotificationService;
+        private readonly ITemplateServices _templateServices;
+        private readonly NotificationLog _notificationLog;
+        public NotificationTemplateController(IEmailNotificationService emailNotificationService,ITemplateServices templateServices)
+        {
+            _notificationLog = new NotificationLog(TimeStamp.GetTimeStamp());
+            _emailNotificationService =emailNotificationService;
+            _templateServices=templateServices;
+        }
+        [HttpPost(&quot;SaveEmailNotificationTemplate&quot;)]
+        public IActionResult SaveEmailNotificationTemplate([FromBody]EmailNotificationTemplate emailNotification)
+        {
+            _notificationLog.WriteLogMessage(&quot;-----Save Email notification---- Controller Name: SaveEmailNotificationTemplate&quot;);
+            var result=_emailNotificationService.SaveNotificationTemplate(emailNotification);
+            return Ok(result);
+        }
+        [HttpGet(&quot;GetNotificationTemplate&quot;)]
+        public IActionResult GetNotificationTemplate(string Type,int NotificationId)
+        {
+            var result = _templateServices.GetTemplateByType(Type, NotificationId);
+            return Ok(result);
+        }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[16,9,16,133,1],[17,9,17,10,1],[18,13,18,78,1],[19,13,19,65,1],[20,13,20,48,1],[21,9,21,10,1],[24,9,24,10,1],[25,13,25,129,1],[26,13,26,94,1],[27,13,27,31,1],[28,9,28,10,1],[31,9,31,10,1],[32,13,32,84,1],[33,13,33,31,1],[34,9,34,10,1]]);
+    </script>
+  </body>
+</html>

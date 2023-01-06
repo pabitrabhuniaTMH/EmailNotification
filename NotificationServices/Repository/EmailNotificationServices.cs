@@ -1,29 +1,30 @@
-﻿    using EmailNotificationServices.ServiceHelper;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using NotificationEntityModels.Models;
 using NotificationServices.IRepository;
+using SMSNotificationServices.ServiceHelper;
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
 
 namespace NotificationServices.Repository
 {
+    [ExcludeFromCodeCoverage]
     public class EmailNotificationService : IEmailNotificationServices
     {
-        public readonly IConfiguration _configuration;
+        public readonly IConfiguration? _configuration;
         public readonly string? _sendEmail;
         public readonly string? _sendPassword;
         private readonly NotificationLog _notificationLog;
-        private readonly long _timeStamp;
-        private static string apiBaseUrl = String.Empty;
-        private static readonly System.Net.Http.HttpClient _httpClient = new();
+        private readonly string? apiBaseUrl;
+        private static readonly HttpClient _httpClient = new();
+        
         public EmailNotificationService(IConfiguration configuration)
         {
-            _timeStamp = TimeStamp.GetTimeStamp();
-            _notificationLog = new NotificationLog(_timeStamp);
+            _notificationLog = new NotificationLog(TimeStamp.GetTimeStamp());
             apiBaseUrl = configuration.GetSection("TEMPLATEBYTYPR_API_PATH").Value;
             if (_httpClient.BaseAddress==null)
-                _httpClient.BaseAddress = new Uri(apiBaseUrl);
+                _httpClient.BaseAddress = new Uri(apiBaseUrl!);
             _sendEmail = configuration.GetSection("MailInfo").GetSection("Email").Value;
             _sendPassword = configuration.GetSection("MailInfo").GetSection("Password").Value;
         }
@@ -32,17 +33,15 @@ namespace NotificationServices.Repository
         {
             try
             {
-                NFType? nFType =(NFType)emailNotification.NotificationType;
+                NFType? nFType =(NFType)emailNotification.NotificationType!;
                 if (nFType != NFType.EMAIL)
-                    throw new Exception("Notification Type is not a valid type");
-                ApiResponseModel? apiResponseModel = new ApiResponseModel();
+                    throw new InvalidDataException("Notification Type is not a valid type");
+                ApiResponseModel? apiResponseModel;
                 _notificationLog.WriteLogMessage("Check Email if valid");
 
                 //check valid email
-                if (!Regex.IsMatch(emailNotification.NotifyTo.EMAIL, @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}
-                ~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:
-                [a-z0-9-]*[a-z0-9])?)\Z", RegexOptions.IgnoreCase))
-                    throw new Exception(emailNotification.NotifyTo.EMAIL + " Is not a valid email");
+                if (!Regex.IsMatch(emailNotification.NotifyTo!.EMAIL!, @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z", RegexOptions.IgnoreCase))
+                    throw new InvalidDataException(emailNotification.NotifyTo.EMAIL + " Is not a valid email");
 
                 //Called Get Template API
                 string endpoint = apiBaseUrl + MethodsName.GetTemplate + "?Type="+ nFType+"&&NotificationId="+Convert.ToInt32(emailNotification.NotificationTemplateId);
@@ -53,17 +52,17 @@ namespace NotificationServices.Repository
                     var result = await Response.Content.ReadAsStringAsync();
                     apiResponseModel = JsonConvert.DeserializeObject<ApiResponseModel>(result);
                 }
-                var data = JsonConvert.DeserializeObject<ResponseModel<NotificationParams>>(apiResponseModel.MsgBdy.ToString());
+                var data = JsonConvert.DeserializeObject<ResponseModel<NotificationParams>>(apiResponseModel!.MsgBdy!.ToString()!);
                 //If Template exsits
-                if (data.Data == null)
-                    throw new Exception("Template is not available");
+                if (data!.Data == null)
+                    throw new InvalidDataException("Template is not available");
                 var username = emailNotification.NotifyTo.NAME;
                 #region Email sending
                 MailMessage mail = new MailMessage();
-                mail.To.Add(emailNotification.NotifyTo.EMAIL);
-                mail.From = new MailAddress(_sendEmail);
+                mail.To.Add(emailNotification.NotifyTo.EMAIL!);
+                mail.From = new MailAddress(_sendEmail!);
                 mail.Subject =data.Data.Subject;
-                mail.Body = String.Format(data.Data.BodyMessage,username);
+                mail.Body = String.Format(data.Data.BodyMessage!,username);
                 mail.IsBodyHtml = true;
                 using (SmtpClient smtp = new SmtpClient()) //SMTP request
                 {
@@ -112,4 +111,5 @@ namespace NotificationServices.Repository
         #endregion
 
     }
+
 }

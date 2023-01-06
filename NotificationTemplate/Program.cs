@@ -3,9 +3,12 @@ using NotificationTemplateServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+//This service is for NotificationTemplateDBAccess Library
 builder.Services.ConfigNotificationTemplateDBAccess();
+
+//This service is for NotificationTemplateService Library
 builder.Services.ConfigNotificationTemplateService();
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

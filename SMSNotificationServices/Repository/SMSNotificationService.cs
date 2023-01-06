@@ -9,40 +9,38 @@ using Twilio.Rest.Api.V2010.Account;
 
 namespace SMSNotificationServices.Repository
 {
-    public class SMSNotificationService : ISMSNotificationService
+    public class SmsNotificationService : ISmsNotificationService
     {
-        public readonly IConfiguration _configuration;
-        private static string? apiBaseUrl = String.Empty;
-        private static readonly HttpClient _httpClient = new();
+        public readonly IConfiguration? _configuration;
+        private  readonly string? apiBaseUrl;
+        private  readonly HttpClient _httpClient = new();
         private readonly string? _accountSID;
         private readonly string? _authToken;
         private readonly string? _fromPhone;
         private readonly NotificationLog _notificationLog;
-        private readonly long _timeStamp;
-        public SMSNotificationService(IConfiguration configuration)
+        public SmsNotificationService(IConfiguration configuration)
         {
-            _timeStamp = TimeStamp.GetTimeStamp();
-            _notificationLog = new NotificationLog(_timeStamp);
+            _notificationLog = new NotificationLog(TimeStamp.GetTimeStamp());
             _accountSID = configuration.GetSection("SMSService").GetSection("AccountSID").Value;
             _authToken = configuration.GetSection("SMSService").GetSection("AuthToken").Value;
             _fromPhone= configuration.GetSection("SMSService").GetSection("FromPhone").Value;
             apiBaseUrl = configuration.GetSection("TEMPLATEBYTYPR_API_PATH").Value;
             if (_httpClient.BaseAddress == null)
-                _httpClient.BaseAddress = new Uri(apiBaseUrl);
+                _httpClient.BaseAddress = new Uri(apiBaseUrl!);
         }
         #region SendNotification
-        public async Task<ApiResponseModel> SendNotification(SMSNotification sMSNotification)
+        public async Task<ApiResponseModel> SendNotification(SmsNotification sMSNotification)
         {
             try
             {
                 NFType? nFType = (NFType)sMSNotification.NOTIFICATIONTYPE;
                 if (nFType != NFType.SMS)
-                    throw new Exception("Notification Type is not a valid type");
+                    throw new InvalidDataException("Notification Type is not a valid type");
 
                 _notificationLog.WriteLogMessage("Checking Phone Number  "+sMSNotification.PHONE);
-                ApiResponseModel? apiResponseModel = new ApiResponseModel();
+                ApiResponseModel? apiResponseModel;
                 if (sMSNotification.PHONE == null && sMSNotification.PHONE == "")
-                    throw new Exception("Phone Number should not be null");
+                    throw new InvalidDataException("Phone Number should not be null");
 
                 #region Calling Get Template API
                 //Calling Get Template API
@@ -54,11 +52,11 @@ namespace SMSNotificationServices.Repository
                     var result = await Response.Content.ReadAsStringAsync();
                     apiResponseModel = JsonConvert.DeserializeObject<ApiResponseModel>(result);
                 }
-                var data = JsonConvert.DeserializeObject<ResponseModel<NotificationParams>>(apiResponseModel.MsgBdy.ToString());
+                var data = JsonConvert.DeserializeObject<ResponseModel<NotificationParams>>(apiResponseModel!.MsgBdy!.ToString()!);
                 
                 //If Template exsits
-                if (data.Data == null)
-                    throw new Exception("Template is not available");
+                if (data!.Data == null)
+                    throw new InvalidDataException("Template is not available");
 
                 #endregion End API Call
 
@@ -66,7 +64,7 @@ namespace SMSNotificationServices.Repository
                 TwilioClient.Init(_accountSID, _authToken);
                 var username = sMSNotification.NAME;
                 var message = MessageResource.Create(from: new Twilio.Types.PhoneNumber(_fromPhone), 
-                    body: String.Format(data.Data.BodyMessage, username), to: new Twilio.Types.PhoneNumber("+91" + sMSNotification.PHONE));
+                    body: String.Format(data.Data.BodyMessage!, username), to: new Twilio.Types.PhoneNumber("+91" + sMSNotification.PHONE));
                 _notificationLog.WriteLogMessage("MSG Successfully sent  Ref Id: "+message);
                 //END
 

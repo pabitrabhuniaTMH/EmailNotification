@@ -1,0 +1,12 @@
+﻿C:\Users\Pabitra Bhunia\source\EmailNotification GIT\SMSBasedNotification\Controllers\SendSMSNotificationController.cs
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\SMSBasedNotification\Program.cs
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\SMSBasedNotification\obj\Debug\net6.0\SMSBasedNotification.GlobalUsings.g.cs
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\SMSBasedNotification\obj\Debug\net6.0\.NETCoreApp,Version=v6.0.AssemblyAttributes.cs
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\SMSBasedNotification\obj\Debug\net6.0\SMSBasedNotification.AssemblyInfo.cs
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\SMSBasedNotification\obj\Debug\net6.0\SMSBasedNotification.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\SMSBasedNotification\appsettings.Development.json
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\SMSBasedNotification\appsettings.json
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\SMSBasedNotification\Logs\12-28-2022-1672242207.txt
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\SMSBasedNotification\Logs\12-28-2022-1672242260.txt
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\SMSBasedNotification\Logs\12-28-2022-1672246840.txt
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\SMSBasedNotification\Properties\launchSettings.json

@@ -1,0 +1,10 @@
+﻿C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationTemplate\Controllers\NotificationTemplateController.cs
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationTemplate\Program.cs
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationTemplate\obj\Debug\net6.0\NotificationTemplate.GlobalUsings.g.cs
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationTemplate\obj\Debug\net6.0\.NETCoreApp,Version=v6.0.AssemblyAttributes.cs
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationTemplate\obj\Debug\net6.0\NotificationTemplate.AssemblyInfo.cs
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationTemplate\obj\Debug\net6.0\NotificationTemplate.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationTemplate\appsettings.Development.json
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationTemplate\appsettings.json
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationTemplate\Logs\12-30-2022-1672410998.txt
+C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationTemplate\Properties\launchSettings.json

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Pabitra Bhunia\source\EmailNotification GIT\NotificationEntityModels\Models\EmailNotification.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System.ComponentModel.DataAnnotations;
+
+namespace NotificationEntityModels.Models
+{
+
+    public class EmailNotification
+    {
+        [Required(ErrorMessage = &quot;NotifyTo is required&quot;)]
+        public NotifyTo? NotifyTo { get; set; }
+        [Required(ErrorMessage = &quot;NotificationType is required&quot;)]
+        public Char? NotificationType { get; set; }
+        [Required(ErrorMessage = &quot;NotificationTemplateId is required&quot;)]
+        public string? NotificationTemplateId { get; set; }
+
+    }
+    public class NotifyTo:BaseEntity
+    {
+        [Required(ErrorMessage = &quot;NAME is required&quot;)]
+        public string? NAME { get; set; }
+        [Required(ErrorMessage =&quot;Email should not be null&quot;)]
+        public string? EMAIL { get; set; }
+    }
+
+    //For notification type
+    public enum NFType
+    {
+        SMS=&#39;S&#39;,
+        EMAIL=&#39;E&#39;,
+        WHATSAPP=&#39;W&#39;
+    }
+
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[9,37,9,41,0],[9,42,9,46,1],[11,41,11,45,0],[11,46,11,50,1],[13,49,13,53,0],[13,54,13,58,1],[19,31,19,35,0],[19,36,19,40,1],[21,32,21,36,0],[21,37,21,41,1]]);
+    </script>
+  </body>
+</html>

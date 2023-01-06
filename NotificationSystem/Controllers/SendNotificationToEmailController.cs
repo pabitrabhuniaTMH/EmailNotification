@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using NotificationEntityModels.Models;
 using NotificationServices.IRepository;
-using EmailNotificationServices.ServiceHelper;
-using System.Text.Json;
+using SMSNotificationServices.ServiceHelper;
 
 namespace NotificationSystem.Controllers
 {
@@ -13,11 +11,9 @@ namespace NotificationSystem.Controllers
     {
         private readonly IEmailNotificationServices _emailNotificationServices;
         private readonly NotificationLog _notificationLog;
-        private readonly long _timeStamp;
         public SendNotificationToEmailController(IEmailNotificationServices emailNotificationServices)
         {
-            _timeStamp = TimeStamp.GetTimeStamp();
-            _notificationLog = new NotificationLog(_timeStamp);
+            _notificationLog = new NotificationLog(TimeStamp.GetTimeStamp());
             _emailNotificationServices = emailNotificationServices;
         }
         [HttpPost]
@@ -26,8 +22,7 @@ namespace NotificationSystem.Controllers
         {
             _notificationLog.WriteLogMessage("SendNotification started------Controller: SendNotification");
             var result = await _emailNotificationServices.SendNotification(emailNotification);
-            return Ok(result);
-            
+            return Ok(result);            
         }
     }
 }

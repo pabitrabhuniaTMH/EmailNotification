@@ -7,19 +7,17 @@ namespace SMSBasedNotification.Controllers
 {
     [Route("api/v0.0.1/[controller]")]
     [ApiController]
-    public class SendNotificationToSMSController : ControllerBase
+    public class SendNotificationToSmsController : ControllerBase
     {
-        private readonly ISMSNotificationService _sMSNotificationService;
+        private readonly ISmsNotificationService _sMSNotificationService;
         private readonly NotificationLog _notificationLog;
-        private readonly long _timeStamp;
-        public SendNotificationToSMSController(ISMSNotificationService sMSNotificationService)
+        public SendNotificationToSmsController(ISmsNotificationService sMSNotificationService)
         {
-            _timeStamp = TimeStamp.GetTimeStamp();
-            _notificationLog = new NotificationLog(_timeStamp);
+            _notificationLog = new NotificationLog(TimeStamp.GetTimeStamp());
             _sMSNotificationService = sMSNotificationService;
         }
         [HttpPost("SendNotificationToSMS")]
-        public async Task<IActionResult> SendNotificationToSMS([FromBody]SMSNotification sMSNotification)
+        public async Task<IActionResult> SendNotificationToSMS([FromBody]SmsNotification sMSNotification)
         {
             _notificationLog.WriteLogMessage("Sending SMS notification");
             var result = await _sMSNotificationService.SendNotification(sMSNotification);
