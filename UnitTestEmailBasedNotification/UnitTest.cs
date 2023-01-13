@@ -7,6 +7,7 @@ using NotificationServices;
 using NotificationServices.IRepository;
 using NotificationSystem.Controllers;
 using SMSNotificationServices.ServiceHelper;
+using System.Net;
 
 namespace UnitTestEmailBasedNotification
 {
@@ -60,7 +61,7 @@ namespace UnitTestEmailBasedNotification
                     {
                         ID = TimeStamp.GetTimeStamp(),
                         Status = "Success",
-                        StatusCode = 200,
+                        StatusCode = HttpStatusCode.OK,
                         Message = "Email Notification successfullly sent"
                     }
                 }
@@ -74,7 +75,7 @@ namespace UnitTestEmailBasedNotification
             var serviceCollection = new ServiceCollection();
             serviceCollection.ConfigNotificationService();
             var serviceProvider = serviceCollection.BuildServiceProvider();
-            Assert.NotNull(serviceProvider);
+            Assert.That(serviceProvider, Is.Not.Null);
         }
     }
 }

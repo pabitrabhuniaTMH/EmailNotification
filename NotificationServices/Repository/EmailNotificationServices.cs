@@ -4,6 +4,7 @@ using NotificationEntityModels.Models;
 using NotificationServices.IRepository;
 using SMSNotificationServices.ServiceHelper;
 using System.Diagnostics.CodeAnalysis;
+using System.Net;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
 
@@ -58,13 +59,13 @@ namespace NotificationServices.Repository
                     throw new InvalidDataException("Template is not available");
                 var username = emailNotification.NotifyTo.NAME;
                 #region Email sending
-                MailMessage mail = new MailMessage();
+                MailMessage mail = new();
                 mail.To.Add(emailNotification.NotifyTo.EMAIL!);
                 mail.From = new MailAddress(_sendEmail!);
                 mail.Subject =data.Data.Subject;
                 mail.Body = String.Format(data.Data.BodyMessage!,username);
                 mail.IsBodyHtml = true;
-                using (SmtpClient smtp = new SmtpClient()) //SMTP request
+                using (SmtpClient smtp = new()) //SMTP request
                 {
                     smtp.Host = "smtp.gmail.com";
                     smtp.Port = 587;
@@ -83,7 +84,7 @@ namespace NotificationServices.Repository
                         Data=new BaseResponseModel { 
                             ID=TimeStamp.GetTimeStamp(),
                             Status="Success",
-                            StatusCode=200,
+                            StatusCode=HttpStatusCode.OK,
                             Message="Email Notification successfullly sent"
                         }
                     }
@@ -100,7 +101,7 @@ namespace NotificationServices.Repository
                         {
                             ID = TimeStamp.GetTimeStamp(),
                             Status = "Failed",
-                            StatusCode = 400,
+                            StatusCode = HttpStatusCode.InternalServerError,
                             Message = ex.ToString()
                         }
                     }

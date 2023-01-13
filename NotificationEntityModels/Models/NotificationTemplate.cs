@@ -18,8 +18,8 @@ namespace NotificationEntityModels.Models
         public string? RequestDevice { get; set; }
         [Required(ErrorMessage = "Requestion is required")]      
         public int? Requestion { get; set; }
-
     }
+
     public class NotificationParams
     {
         public int? ID { get; set; }

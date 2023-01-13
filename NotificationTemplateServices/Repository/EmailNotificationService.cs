@@ -32,7 +32,7 @@ namespace NotificationTemplateServices.Repository
                             Data = new BaseResponseModel
                             {
                                 ID = TimeStamp.GetTimeStamp(),
-                                StatusCode = 200,
+                                StatusCode = System.Net.HttpStatusCode.OK,
                                 Status = "Success",
                                 Message = "Data Has Been Successfully saved"
                             }
@@ -51,7 +51,7 @@ namespace NotificationTemplateServices.Repository
                         Data = new BaseResponseModel
                         {
                             ID = TimeStamp.GetTimeStamp(),
-                            StatusCode = 422,
+                            StatusCode = System.Net.HttpStatusCode.InternalServerError,
                             Status = "Failed",
                             Message = e.Message
                         }

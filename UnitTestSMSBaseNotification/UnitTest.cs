@@ -52,7 +52,7 @@ namespace UnitTestSMSBaseNotification
                 MsgHdr = new BaseResponseModel
                 {
                     ID = TimeStamp.GetTimeStamp(),
-                    StatusCode = 200,
+                    StatusCode = System.Net.HttpStatusCode.OK,
                     Status = "Success",
                     Message = "SMS Notification Successfully Sent"
                 },
@@ -86,8 +86,11 @@ namespace UnitTestSMSBaseNotification
             var result = smsNotificationService.SendNotification(InputValue);
             InputValue.NOTIFICATIONTYPE = 'Y';
             var resultExeception = smsNotificationService.SendNotification(InputValue);
-            Assert.That(resultExeception, Is.Not.Null);
-            Assert.That(result, Is.Not.Null);       
+            Assert.Multiple(() =>
+            {
+                Assert.That(resultExeception, Is.Not.Null);
+                Assert.That(result, Is.Not.Null);
+            });
         }
         #endregion
 
@@ -98,7 +101,7 @@ namespace UnitTestSMSBaseNotification
             var serviceCollection = new ServiceCollection();
             serviceCollection.ConfigSMSNotificationService();
             var serviceProvider = serviceCollection.BuildServiceProvider();
-            Assert.NotNull(serviceProvider);
+            Assert.That(serviceProvider, Is.Not.Null);
         }
     }
 }

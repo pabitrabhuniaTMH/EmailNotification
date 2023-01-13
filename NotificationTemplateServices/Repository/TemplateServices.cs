@@ -29,7 +29,7 @@ namespace NotificationTemplateServices.Repository
                         {
                             ID = TimeStamp.GetTimeStamp(),
                             Status = "Success",
-                            StatusCode = 200
+                            StatusCode = System.Net.HttpStatusCode.OK
                         },
                         MsgBdy = new ResponseModel<NotificationParams>
                         {
@@ -47,7 +47,7 @@ namespace NotificationTemplateServices.Repository
                     {
                         ID = TimeStamp.GetTimeStamp(),
                         Status = "Failed",
-                        StatusCode = 422,
+                        StatusCode = System.Net.HttpStatusCode.InternalServerError,
                         Message = e.Message
                     }
                 };

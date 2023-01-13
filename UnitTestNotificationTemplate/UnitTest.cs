@@ -45,7 +45,7 @@ namespace UnitTestNotificationTemplate
                     Data = new BaseResponseModel
                     {
                         ID = TimeStamp.GetTimeStamp(),
-                        StatusCode = 200,
+                        StatusCode = System.Net.HttpStatusCode.OK,
                         Status = "Success",
                         Message = "Data Has Been Successfully saved"
                     }
@@ -87,7 +87,7 @@ namespace UnitTestNotificationTemplate
                 RequestDevice = "40-8D-5C-36-32-32",
                 Requestion = 0
             };
-            var expectedValue = new BaseResponseModel { ID = TimeStamp.GetTimeStamp(), Message = "Data Has Been Successfully saved", Status ="Success", StatusCode = 200 };
+            var expectedValue = new BaseResponseModel { ID = TimeStamp.GetTimeStamp(), Message = "Data Has Been Successfully saved", Status ="Success", StatusCode = System.Net.HttpStatusCode.OK };
             _mockObjTemplate.Setup(x => x.SeveNotification(It.IsAny<EmailNotificationTemplate>())).Returns(-1);
             var emailNotificationService = new EmailNotificationServices(_mockObjTemplate.Object);
             var actualValue = emailNotificationService.SaveNotificationTemplate(inputValue);
@@ -96,10 +96,13 @@ namespace UnitTestNotificationTemplate
             ResponseModel<BaseResponseModel>? responseModel = responseData as ResponseModel<BaseResponseModel>;
             BaseResponseModel? response = responseModel!.Data;
             expectedValue.ID = response!.ID;
-            Assert.That(response.ID, Is.EqualTo(expectedValue.ID));
-            Assert.That(response.StatusCode, Is.EqualTo(expectedValue.StatusCode));
-            Assert.That(response.Status, Is.EqualTo(expectedValue.Status));
-            Assert.That(response.Message, Is.EqualTo(expectedValue.Message));
+            Assert.Multiple(() =>
+            {
+                Assert.That(response.ID, Is.EqualTo(expectedValue.ID));
+                Assert.That(response.StatusCode, Is.EqualTo(expectedValue.StatusCode));
+                Assert.That(response.Status, Is.EqualTo(expectedValue.Status));
+                Assert.That(response.Message, Is.EqualTo(expectedValue.Message));
+            });
         }
 
         [Test]
@@ -115,7 +118,7 @@ namespace UnitTestNotificationTemplate
                 RequestDevice = "40-8D-5C-36-32-32",
                 Requestion = 0
             };
-            var expectedValue = new BaseResponseModel { ID = TimeStamp.GetTimeStamp(), Message = "Notification Type is invalid", Status = "Failed", StatusCode = 422 };
+            var expectedValue = new BaseResponseModel { ID = TimeStamp.GetTimeStamp(), Message = "Notification Type is invalid", Status = "Failed", StatusCode = System.Net.HttpStatusCode.InternalServerError };
             _mockObjTemplate.Setup(x => x.SeveNotification(It.IsAny<EmailNotificationTemplate>())).Returns(-1);
             var emailNotificationService = new EmailNotificationServices(_mockObjTemplate.Object);
             var actualValue = emailNotificationService.SaveNotificationTemplate(inputValue);
@@ -124,10 +127,13 @@ namespace UnitTestNotificationTemplate
             ResponseModel<BaseResponseModel>? responseModel = responseData as ResponseModel<BaseResponseModel>;
             BaseResponseModel? response = responseModel!.Data;
             expectedValue.ID = response!.ID;
-            Assert.That(response.ID, Is.EqualTo(expectedValue.ID));
-            Assert.That(response.StatusCode, Is.EqualTo(expectedValue.StatusCode));
-            Assert.That(response.Status, Is.EqualTo(expectedValue.Status));
-            Assert.That(response.Message, Is.EqualTo(expectedValue.Message));
+            Assert.Multiple(() =>
+            {
+                Assert.That(response.ID, Is.EqualTo(expectedValue.ID));
+                Assert.That(response.StatusCode, Is.EqualTo(expectedValue.StatusCode));
+                Assert.That(response.Status, Is.EqualTo(expectedValue.Status));
+                Assert.That(response.Message, Is.EqualTo(expectedValue.Message));
+            });
         }
 
         #region Get Notification Template
@@ -151,7 +157,7 @@ namespace UnitTestNotificationTemplate
                 RequestDevice ="string",
                 Requestion ="0"
             };
-            _mockObjTemplateServices.Setup(x => x.GetTemplateByType(It.IsAny<string>(), It.IsAny<int>())).Returns(JsonConvert.DeserializeObject<ApiResponseModel>(expectedValue!));
+            _mockObjTemplateServices.Setup(x => x.GetTemplateByType(It.IsAny<string>(), It.IsAny<int>())).Returns(JsonConvert.DeserializeObject<ApiResponseModel>(expectedValue)!);
             var notificationTemplateController = new NotificationTemplateController(_mockObjEmailNotification.Object, _mockObjTemplateServices.Object);
             var actualValue = notificationTemplateController.GetNotificationTemplate("E",23);
             
@@ -164,16 +170,19 @@ namespace UnitTestNotificationTemplate
            
             NotificationParams? actualParamsValue = a!.Data;
             var valueForexpected = JsonConvert.SerializeObject(apiResponseModel);
-            //Compare both value Expected and Actual value
-            Assert.That(valueForActual, Is.EqualTo(valueForexpected));
-            Assert.That(exepectedPrmsValue.ID, Is.EqualTo(actualParamsValue!.ID));
-            Assert.That(exepectedPrmsValue.NotificationType, Is.EqualTo(actualParamsValue.NotificationType));
-            Assert.That(exepectedPrmsValue.Type, Is.EqualTo(actualParamsValue.Type));
-            Assert.That(exepectedPrmsValue.TemplateValidUpto, Is.EqualTo(actualParamsValue.TemplateValidUpto));
-            Assert.That(exepectedPrmsValue.Subject, Is.EqualTo(actualParamsValue.Subject));
-            Assert.That(exepectedPrmsValue.BodyMessage, Is.EqualTo(actualParamsValue.BodyMessage));
-            Assert.That(exepectedPrmsValue.RequestDevice, Is.EqualTo(actualParamsValue.RequestDevice));
-            Assert.That(exepectedPrmsValue.Requestion, Is.EqualTo(actualParamsValue.Requestion));
+            Assert.Multiple(() =>
+            {
+                //Compare both value Expected and Actual value
+                Assert.That(valueForActual, Is.EqualTo(valueForexpected));
+                Assert.That(exepectedPrmsValue.ID, Is.EqualTo(actualParamsValue!.ID));
+                Assert.That(exepectedPrmsValue.NotificationType, Is.EqualTo(actualParamsValue.NotificationType));
+                Assert.That(exepectedPrmsValue.Type, Is.EqualTo(actualParamsValue.Type));
+                Assert.That(exepectedPrmsValue.TemplateValidUpto, Is.EqualTo(actualParamsValue.TemplateValidUpto));
+                Assert.That(exepectedPrmsValue.Subject, Is.EqualTo(actualParamsValue.Subject));
+                Assert.That(exepectedPrmsValue.BodyMessage, Is.EqualTo(actualParamsValue.BodyMessage));
+                Assert.That(exepectedPrmsValue.RequestDevice, Is.EqualTo(actualParamsValue.RequestDevice));
+                Assert.That(exepectedPrmsValue.Requestion, Is.EqualTo(actualParamsValue.Requestion));
+            });
         }
         #endregion
 
@@ -230,7 +239,7 @@ namespace UnitTestNotificationTemplate
             var actualValue = template.GetTemplateByType("", 23);
             var responseObject = new ResponseModel<object> { Data = actualValue.MsgBdy };
             var responseData = responseObject.Data;
-            Assert.Null(responseData);
+            Assert.That(responseData, Is.Null);
 
         }
 
@@ -261,9 +270,11 @@ namespace UnitTestNotificationTemplate
             var b = a.GetTemplateByType("EMAIL",23);
             var emailNotification = new NotificationTemplateDBAccess.Repository.EmailNotification(configuration);
             var resultSaveNotification = emailNotification.SeveNotification(inputValue);
-            Assert.NotZero(resultSaveNotification);
-            Assert.NotNull(b);
-
+            Assert.Multiple(() =>
+            {
+                Assert.That(resultSaveNotification, Is.Not.Zero);
+                Assert.That(b, Is.Not.Null);
+            });
         }
 
         [Test]

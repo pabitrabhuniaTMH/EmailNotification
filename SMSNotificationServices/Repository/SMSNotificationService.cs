@@ -73,7 +73,7 @@ namespace SMSNotificationServices.Repository
                     MsgHdr = new BaseResponseModel
                     {
                         ID = TimeStamp.GetTimeStamp(),
-                        StatusCode = 200,
+                        StatusCode = System.Net.HttpStatusCode.OK,
                         Status = "Success",
                         Message = "SMS Notification Successfully Sent"
                     },
@@ -88,7 +88,7 @@ namespace SMSNotificationServices.Repository
                     MsgHdr = new BaseResponseModel
                     {
                         ID = TimeStamp.GetTimeStamp(),
-                        StatusCode = 422,
+                        StatusCode = System.Net.HttpStatusCode.InternalServerError,
                         Status = "Failed",
                         Message = e.Message
                     }

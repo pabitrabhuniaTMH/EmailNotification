@@ -1,4 +1,6 @@
-﻿namespace NotificationEntityModels.Models
+﻿using System.Net;
+
+namespace NotificationEntityModels.Models
 {
     public class ApiResponseModel
     {
@@ -11,7 +13,7 @@
     }
     public class BaseResponseModel : BaseEntity
     {
-        public int StatusCode { get; set; }
+        public HttpStatusCode StatusCode { get; set; }
         public string? Status { get; set; }
         public string? Message { get; set; }
     }
